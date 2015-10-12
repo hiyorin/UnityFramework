@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-public class EditorUtility : Editor
+public class EditorUtilityEx : Editor
 {
     public static void DrawList<T> (string label, List<T> list, ref bool isFoldout, Action<int, T> callback=null)
     {

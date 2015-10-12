@@ -21,14 +21,14 @@ public class SceneManagerInspector : SceneManager.AbstractEditor
 
     private void DrawCollectionIgnoreObjectName ()
     {
-        EditorUtility.DrawList<string> ("CollectionIgnoreObjectName", listCollectionIgnoreObjectName, ref isFoldout_1);
+        EditorUtilityEx.DrawList<string> ("CollectionIgnoreObjectName", listCollectionIgnoreObjectName, ref isFoldout_1);
     }
 
     private void DrawSceneNodeSet ()
     {
         if (isSceneNodeFoldout == null || isSceneNodeFoldout.Length != sceneNodeSet.nodeList.ToArray ().Length)
             isSceneNodeFoldout = new bool[sceneNodeSet.nodeList.ToArray ().Length];
-        EditorUtility.DrawList<SceneNode> ("SceneNodeSet", new List<SceneNode> (sceneNodeSet.nodeList), ref isFoldout_2,
+        EditorUtilityEx.DrawList<SceneNode> ("SceneNodeSet", new List<SceneNode> (sceneNodeSet.nodeList), ref isFoldout_2,
             (int index, SceneNode node) => {
                 isSceneNodeFoldout [index] = EditorGUILayout.Foldout (isSceneNodeFoldout [index], node.name);
                 if (isSceneNodeFoldout [index] == true)
