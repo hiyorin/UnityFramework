@@ -7,3 +7,9 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Framework/Transition.unity
+  - enabled: 1
+    path: Assets/Example/SceneManager/Scenes/ExampleSceneManager_A.unity
+  - enabled: 1
+    path: Assets/Example/SceneManager/Scenes/ExampleSceneManager_B.unity
+  - enabled: 1
+    path: Assets/Example/SceneManager/Scenes/ExampleSceneManager_C.unity
