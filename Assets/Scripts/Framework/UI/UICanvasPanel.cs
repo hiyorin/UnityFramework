@@ -44,7 +44,7 @@ namespace Framework.UI
         protected override void Reset ()
         {
             base.Reset ();
-            ResizePanel ();
+            ResetCanvas ();
         }
 
         protected override void Awake ()
@@ -58,21 +58,21 @@ namespace Framework.UI
         {
             base.Start ();
             if (_resize == Resize.Start)
-                ResizePanel ();
+                ResetCanvas ();
         }
 
         void Update ()
         {
             if (_resize == Resize.Update)
-                ResizePanel ();
+                ResetCanvas ();
         }
 
         protected override void OnDestroy ()
         {
-            ResizePanel ();
+            ResetCanvas ();
         }
 
-        private void ResizePanel ()
+        public virtual void ResetCanvas ()
         {
             rectTransform.anchorMin = new Vector2 (0.5f, 0.5f);
             rectTransform.anchorMax = new Vector2 (0.5f, 0.5f);

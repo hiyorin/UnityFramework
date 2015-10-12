@@ -95,17 +95,21 @@ public class TransitionSceneManager : SingletonSceneBase<TransitionSceneManager>
 
         if (beforeObject != null)
         {
-            UICanvas uiCanvas = beforeObject.GetComponentInChildren<UICanvas> ();
-            if (uiCanvas != null)
+            foreach (var uiCanvas in beforeObject.GetComponentsInChildren<UICanvas> ()) 
                 uiCanvas.SlideOut (_duration, SlideTypeConvert (slideType), OnCompleteSlide);
         }
 
         if (afterObject != null)
         {
-            UICanvas uiCanvas = afterObject.GetComponentInChildren<UICanvas> ();
-            if (uiCanvas != null)
+            foreach (var uiCanvas in afterObject.GetComponentsInChildren<UICanvas> ())
                 uiCanvas.SlideIn (_duration, SlideTypeConvert (slideType), OnCompleteSlide);
         }
+    }
+
+    public void ResetSlide (GameObject rootObject)
+    {
+        foreach (var uiCanvas in rootObject.GetComponentsInChildren<UICanvas> ())
+            uiCanvas.ResetCanvas ();
     }
 
     private UICanvas.SlideTo SlideTypeConvert (SlideType slideType)

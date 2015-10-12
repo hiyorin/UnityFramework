@@ -242,9 +242,10 @@ namespace Framework.Scene
     			_sceneNodeSet.Add (sceneNode);
     		}
     		else
-    		{
+            {
     			sceneNode.state = SceneState.Initialize;
                 sceneNode.isActive = true;
+                TransitionSceneManager.Instance.ResetSlide (sceneNode.rootObject);
     		}
 
     		if (callback != null)

@@ -100,7 +100,17 @@ namespace Framework.UI
 				Debug.LogError (m_type);
 				break;
 			}
-		}
+        }
+
+        public override void ResetCanvas ()
+        {
+            foreach (RectTransform trans in rectTransform)
+            {
+                UICanvasPanel panel = trans.GetComponent<UICanvasPanel> ();
+                if (panel != null)
+                    panel.ResetCanvas ();
+            }
+        }
 
         public override void SlideIn (float duration, SlideTo to, TweenCallback onComplete=null)
         {
