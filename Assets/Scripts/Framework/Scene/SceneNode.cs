@@ -5,6 +5,11 @@ namespace Framework.Scene
     public enum Scene
     {
         Empty,
+
+        // Example
+        ExampleSceneManager_A,
+        ExampleSceneManager_B,
+        ExampleSceneManager_C,
     }
 
     public enum SceneType

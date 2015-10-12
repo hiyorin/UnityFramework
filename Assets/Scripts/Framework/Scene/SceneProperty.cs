@@ -6,10 +6,10 @@ namespace Framework.Scene
     [System.Serializable]
     public class SubSceneProperty
     {
-        public readonly string sceneName;
+        public string sceneName;
         public bool isVisible;
 #if UNITY_EDITOR
-        public readonly string sceneFullName;
+        public string sceneFullName;
 
         public SubSceneProperty (string sceneName, bool isVisible, string sceneFullName)
         {

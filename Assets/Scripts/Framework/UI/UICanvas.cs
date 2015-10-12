@@ -102,31 +102,41 @@ namespace Framework.UI
 			}
 		}
 
-        public override void SlideIn (float duration, TweenCallback onComplete=null)
+        public override void SlideIn (float duration, SlideTo to, TweenCallback onComplete=null)
         {
             if (isTransitionComplete == false)
                 return;
             
-            isTransitionComplete = false;
             foreach (RectTransform trans in rectTransform)
             {
                 UICanvasPanel panel = trans.GetComponent<UICanvasPanel> ();
                 if (panel != null)
-                    panel.SlideIn (duration, onComplete);
+                    panel.SlideIn (duration, to, onComplete);
             }
         }
 
-        public override void SlideOut (float duration, TweenCallback onComplete=null)
+        public override void SlideOut (float duration, SlideTo to, TweenCallback onComplete=null)
         {
             if (isTransitionComplete == false)
                 return;
             
-            isTransitionComplete = false;
             foreach (RectTransform trans in rectTransform)
             {
                 UICanvasPanel panel = trans.GetComponent<UICanvasPanel> ();
                 if (panel != null)
-                    panel.SlideOut (duration, onComplete);
+                    panel.SlideOut (duration, to, onComplete);
+            }
+        }
+
+        public override bool isTransitionComplete {
+            get {
+                foreach (RectTransform trans in rectTransform)
+                {
+                    UICanvasPanel panel = trans.GetComponent<UICanvasPanel> ();
+                    if (panel != null && panel.isTransitionComplete == false)
+                        return false;
+                }
+                return true;
             }
         }
 	}

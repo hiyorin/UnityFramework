@@ -10,6 +10,14 @@ public enum FadeType
     White,
 }
 
+public enum SlideType
+{
+    ToUp,
+    ToDown,
+    ToLeft,
+    ToRight,
+}
+
 public class TransitionSceneManager : SingletonSceneBase<TransitionSceneManager>
 {
     [SerializeField]
@@ -77,7 +85,7 @@ public class TransitionSceneManager : SingletonSceneBase<TransitionSceneManager>
         }
     }
 
-    public void Slide (GameObject beforeObject, GameObject afterObject)
+    public void Slide (GameObject beforeObject, GameObject afterObject, SlideType slideType)
     {
         if (isComplete == false)
             return;
@@ -89,14 +97,32 @@ public class TransitionSceneManager : SingletonSceneBase<TransitionSceneManager>
         {
             UICanvas uiCanvas = beforeObject.GetComponentInChildren<UICanvas> ();
             if (uiCanvas != null)
-                uiCanvas.SlideOut (_duration, OnCompleteSlide);
+                uiCanvas.SlideOut (_duration, SlideTypeConvert (slideType), OnCompleteSlide);
         }
 
         if (afterObject != null)
         {
             UICanvas uiCanvas = afterObject.GetComponentInChildren<UICanvas> ();
             if (uiCanvas != null)
-                uiCanvas.SlideIn (_duration, OnCompleteSlide);
+                uiCanvas.SlideIn (_duration, SlideTypeConvert (slideType), OnCompleteSlide);
+        }
+    }
+
+    private UICanvas.SlideTo SlideTypeConvert (SlideType slideType)
+    {
+        switch (slideType)
+        {
+        case SlideType.ToUp:
+            return UICanvas.SlideTo.Up;
+        case SlideType.ToDown:
+            return UICanvas.SlideTo.Down;
+        case SlideType.ToLeft:
+            return UICanvas.SlideTo.Left;
+        case SlideType.ToRight:
+            return UICanvas.SlideTo.Right;
+        default:
+            Debug.LogErrorFormat ("{0} NotFound {1}", typeof(SlideType).Name, slideType);
+            return UICanvas.SlideTo.Left;
         }
     }
 

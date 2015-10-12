@@ -16,5 +16,6 @@ MonoBehaviour:
   _screenMatchWidthOrHeight: 0
   _listCollectionIgnoreObjectName: []
   _listStaticSceneName: []
-  _listResidentSceneName: []
+  _listResidentSceneName:
+  - Transition
   _listFirstLoadTaskSceneName: []

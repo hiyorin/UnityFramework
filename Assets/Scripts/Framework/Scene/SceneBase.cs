@@ -36,14 +36,14 @@ namespace Framework.Scene
             SceneManager.Instance.NextScene (scene, fadeType, isRegisterStack);
         }
 
-        protected void ChangeSubSceneSlide (Scene beforeScene, Scene afterScene)
+        protected void ChangeSubSceneSlide (Scene beforeScene, Scene afterScene, SlideType slideType)
         {
-            SceneManager.Instance.ChangeSubSceneSlide (this, beforeScene, afterScene);
+            SceneManager.Instance.ChangeSubSceneSlide (this, beforeScene, afterScene, slideType);
         }
 
-        protected void ChangeSubSceneSlide (string beforeSceneName, string afterSceneName)
+        protected void ChangeSubSceneSlide (string beforeSceneName, string afterSceneName, SlideType slideType)
         {
-            SceneManager.Instance.ChangeSubSceneSlide (this, beforeSceneName, afterSceneName);
+            SceneManager.Instance.ChangeSubSceneSlide (this, beforeSceneName, afterSceneName, slideType);
         }
     }
 }

@@ -118,6 +118,9 @@ public class ScenePropertyInspector : Editor
         {
             int lastIndex = scene.path.LastIndexOf ("/");
             string sceneName = scene.path.Substring (lastIndex + 1).Replace (".unity", "");
+
+            if (string.IsNullOrEmpty (sceneName) == true)
+                continue;
             if (sceneName.Equals (currentSceneName) == true)
                 continue;
             if (SceneManagerSettings.ListResidentSceneName.Contains (sceneName) == true)

@@ -212,9 +212,11 @@ namespace Framework.Scene
         {
             foreach (var subSceneProperty in sceneNode.property.listAddSubScene)
             {
-                IEnumerator loadSubScenePorocess = LoadSingleSceneProcess (subSceneProperty.sceneName, SceneType.Standard, (SceneNode subSceneNode) => {
-                    subSceneNode.isActive = subSceneProperty.isVisible;
-                });
+                IEnumerator loadSubScenePorocess = LoadSingleSceneProcess (subSceneProperty.sceneName, SceneType.Standard,
+                    (SceneNode subSceneNode) => {
+                        subSceneNode.isActive = subSceneProperty.isVisible;
+                    }
+                );
                 while (loadSubScenePorocess.MoveNext () == true)
                     yield return null;
             }
@@ -273,7 +275,7 @@ namespace Framework.Scene
             }
     	}
 
-        private IEnumerator CreateChangeSubSceneSlideProcess (string beforeSceneName, string afterSceneName)
+        private IEnumerator CreateChangeSubSceneSlideProcess (string beforeSceneName, string afterSceneName, SlideType slideType)
         {
             SceneNode beforeSceneNode = _sceneNodeSet.Find (beforeSceneName);
             SceneNode afterSceneNode = _sceneNodeSet.Find (afterSceneName);
@@ -287,7 +289,9 @@ namespace Framework.Scene
 
             TransitionSceneManager.Instance.Slide (
                 beforeSceneNode == null ? null : beforeSceneNode.rootObject,
-                afterSceneNode == null ? null : afterSceneNode.rootObject);
+                afterSceneNode == null ? null : afterSceneNode.rootObject,
+                slideType
+            );
             while (TransitionSceneManager.Instance.isComplete == false)
                 yield return null;
             
@@ -342,14 +346,16 @@ namespace Framework.Scene
             _nextSceneProcess = CreateNextSceneProcess (backSceneNode.name, fadeType, false);
         }
 
-        public void ChangeSubSceneSlide (SceneBase owner, Scene beforeScene, Scene afterScene)
+        public void ChangeSubSceneSlide (SceneBase owner, Scene beforeScene, Scene afterScene, SlideType slideType)
         {
             ChangeSubSceneSlide (owner,
                 beforeScene == Scene.Empty ? null : beforeScene.ToString (),
-                afterScene == Scene.Empty ? null : afterScene.ToString ());
+                afterScene == Scene.Empty ? null : afterScene.ToString (),
+                slideType
+            );
         }
 
-        public void ChangeSubSceneSlide (SceneBase owner, string beforeSceneName, string afterSceneName)
+        public void ChangeSubSceneSlide (SceneBase owner, string beforeSceneName, string afterSceneName, SlideType slideType)
         {
             if (IsSceneLoading () == true)
                 throw new Exception (string.Format ("{0}.{1} Loading...", typeof(SceneManager).Name, MethodBase.GetCurrentMethod ().Name));
@@ -364,7 +370,7 @@ namespace Framework.Scene
             if (string.IsNullOrEmpty (afterSceneName) == false && _sceneNodeSet.IsCurrentSubSceneContains (afterSceneName) == false)
                 throw new Exception (string.Format ("{0}.{1} afterSceneName: {3} NotFound in SubSceneList...", typeof(SceneManager).Name, MethodBase.GetCurrentMethod ().Name, afterSceneName));
 
-            _changeSubSceneProcess = CreateChangeSubSceneSlideProcess (beforeSceneName, afterSceneName);
+            _changeSubSceneProcess = CreateChangeSubSceneSlideProcess (beforeSceneName, afterSceneName, slideType);
         }
 
     	/// <summary>
@@ -439,7 +445,7 @@ namespace Framework.Scene
     		if (ownerSceneNode == null)
     			return;
 
-    		Scene currentScene = (Scene)Enum.ToObject (typeof(Scene), ownerSceneNode.name);
+            Scene currentScene = (Scene)Enum.Parse (typeof(Scene), ownerSceneNode.name);
     		SceneBase currentSceneBase = _sceneNodeSet.currentSceneNode.scene;
     		if (currentSceneBase.Equals (owner) == false)
     			currentSceneBase.OnSceneMessage (currentScene, param);
