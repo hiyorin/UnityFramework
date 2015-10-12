@@ -392,6 +392,11 @@ namespace Framework.Scene
             return (_changeSubSceneProcess != null);
         }
 
+        public bool IsCurrentScene (SceneBase owner)
+        {
+            return _sceneNodeSet.currentSceneNode.scene.Equals (owner);
+        }
+
     	/// <summary>
     	/// 回収されないオブジェクトの名前を登録する
     	/// </summary>

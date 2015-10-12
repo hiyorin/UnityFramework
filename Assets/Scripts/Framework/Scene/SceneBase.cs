@@ -16,6 +16,11 @@ namespace Framework.Scene
 
     	public virtual void OnSceneMessage (Scene owner, Dictionary<string, object> param) {}
 
+        protected bool IsMainScene ()
+        {
+            return SceneManager.Instance.IsCurrentScene (this);
+        }
+
     	protected void SendSceneMessage (Dictionary<string, object> param)
     	{
             SceneManager.Instance.SendMessage (this, param);
