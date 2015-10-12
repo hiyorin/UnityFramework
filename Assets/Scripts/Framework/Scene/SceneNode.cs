@@ -56,7 +56,14 @@ namespace Framework.Scene
     	public SceneProperty property {
             get {
                 if (_property == null)
-                    _property = rootObject.transform.GetComponentInChildren<SceneProperty> ();
+                {
+                    try {
+                        _property = rootObject.transform.GetComponentInChildren<SceneProperty> ();
+                    } catch (MissingReferenceException e) {
+                        Debug.LogWarning (e);
+                        return null;
+                    }
+                }
                 return _property;
             }
         }

@@ -253,7 +253,7 @@ MonoBehaviour:
   - sceneName: ExampleSceneManager_C
     isVisible: 0
     sceneFullName: Assets/Example/SceneManager/ExampleSceneManager_C.unity
-  _isAlwaysDestroy: 0
+  _isAlwaysDestroy: 1
 --- !u!114 &1263229592
 MonoBehaviour:
   m_ObjectHideFlags: 0

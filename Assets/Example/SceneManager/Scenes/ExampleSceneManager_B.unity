@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _listAddSubScene: []
-  _isAlwaysDestroy: 0
+  _isAlwaysDestroy: 1
 --- !u!114 &1263229592
 MonoBehaviour:
   m_ObjectHideFlags: 0

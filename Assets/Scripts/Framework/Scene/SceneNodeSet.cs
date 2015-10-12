@@ -128,8 +128,13 @@ namespace Framework.Scene
     	{
             if (currentSceneNode.state != SceneState.Sleep && currentSceneNode.state != SceneState.Destroy)
                 return false;
+
+            // メインシーンが既に破棄済みの場合もある
+            SceneProperty currentProperty = currentSceneNode.property;
+            if (currentProperty == null)
+                return true;
             
-            foreach (var subSceneProperty in currentSceneNode.property.listAddSubScene)
+            foreach (var subSceneProperty in currentProperty.listAddSubScene)
     		{
     			SceneNode node = null;
                 if (_dictSceneNode.TryGetValue (subSceneProperty.sceneName, out node) == false)
