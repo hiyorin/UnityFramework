@@ -9,8 +9,10 @@ using UniLinq;
 public class ScenePropertyInspector : Editor
 {
     private static Dictionary<string, GameObject> LoadSubSceneDictionary = new Dictionary<string, GameObject> ();
-    private static HideFlags HideFlag = (HideFlags.NotEditable | HideFlags.DontSaveInEditor);
     private static bool IsHierarchyWindowChanged = false;
+
+    private const HideFlags HideFlag = (HideFlags.NotEditable | HideFlags.DontSaveInEditor);
+    private const string AdditiveScenePrefix = "_Additive";
 
     [InitializeOnLoadMethod]
     private static void InitializeOnLoad ()
@@ -18,6 +20,7 @@ public class ScenePropertyInspector : Editor
         EditorApplication.update += OnUpdate;
         EditorApplication.playmodeStateChanged += OnPlayModeStateChanged;
         EditorApplication.hierarchyWindowChanged += OnHierarchyWindowChanged;
+        EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyWindowItemOnGUI;
     }
 
     private static void OnUpdate ()
@@ -77,6 +80,26 @@ public class ScenePropertyInspector : Editor
     {
         // Hierarchyの変更をフックしてHierarchyに変更を加えると即時反映されないのでUpdateで実行する
         IsHierarchyWindowChanged = true;
+    }
+
+    private static void OnHierarchyWindowItemOnGUI (int instanceID, Rect selectionRect)
+    {
+        GameObject go = EditorUtility.InstanceIDToObject (instanceID) as GameObject;
+        if (go == null)
+            return;
+        if (go.name.StartsWith (AdditiveScenePrefix) == false &&
+                go.transform.root.name.StartsWith (AdditiveScenePrefix) == false)
+            return;
+        
+        Color colorBuffer = GUI.color;
+
+        Rect rect = selectionRect;
+        rect.x = 0;
+        rect.xMax = selectionRect.xMax;
+        GUI.color = new Color (1.0f, 0.0f, 0.0f, 0.2f);
+        GUI.Box (rect, string.Empty);
+
+        GUI.color = colorBuffer;
     }
 
 	public override void OnInspectorGUI()
@@ -229,6 +252,9 @@ public class ScenePropertyInspector : Editor
 
             go.transform.SetParent (result.transform);
         }
+
+        // Hierarchy上でわかりやすいように名前を変えておく
+        result.name = AdditiveScenePrefix + " (" + result.name + ")";
 
         return result;
     }
