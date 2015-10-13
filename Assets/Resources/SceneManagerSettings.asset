@@ -18,4 +18,5 @@ MonoBehaviour:
   _listStaticSceneName: []
   _listResidentSceneName:
   - Transition
+  - Indicator
   _listFirstLoadTaskSceneName: []

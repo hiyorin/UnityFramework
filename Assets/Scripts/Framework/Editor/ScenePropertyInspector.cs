@@ -1,9 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Linq;
 using System.Collections.Generic;
 using Framework.Scene;
-using UniLinq;
 
 [CustomEditor (typeof (SceneProperty))]
 public class ScenePropertyInspector : Editor

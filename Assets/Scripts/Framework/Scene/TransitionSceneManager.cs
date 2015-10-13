@@ -32,11 +32,6 @@ public class TransitionSceneManager : SingletonSceneBase<TransitionSceneManager>
 
     public bool isComplete { private set; get; }
 
-    public float duration {
-        set { _duration = value; }
-        get { return _duration; }
-    }
-
     public override bool OnSceneCreate ()
     {
         isComplete = true;

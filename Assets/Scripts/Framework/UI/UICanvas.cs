@@ -47,6 +47,7 @@ namespace Framework.UI
         {
             base.Reset ();
             gameObject.layer = LayerMask.NameToLayer ("UI");
+            OnValidate ();
         }
 
 		protected override void OnValidate ()
