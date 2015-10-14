@@ -16,7 +16,7 @@ public class ResourceManagerInspector : ResourceManager.AbstractEditor
     private bool[] isFoldoutAssetBundleSet = null;
 
     private bool isFoldoutTexture = false;
-    private Dictionary<string, bool> isFoldoutTextureSet = new Dictionary<string, bool> ();
+    private bool[] isFoldoutTextureSet = null;
 
     public override void OnInspectorGUI ()
     {
@@ -97,17 +97,15 @@ public class ResourceManagerInspector : ResourceManager.AbstractEditor
 
     private void DrawTexture ()
     {
-        if (isFoldoutTextureSet.Count != dictResourceTexture.Count)
+        if (isFoldoutTextureSet == null || isFoldoutTextureSet.Length != dictResourceTexture.Count)
         {
-            isFoldoutTextureSet.Clear ();
-            foreach (var key in dictResourceTexture.Keys)
-                isFoldoutTextureSet.Add (key, false);
+            isFoldoutTextureSet = new bool[dictResourceTexture.Count];
         }
         EditorUtilityEx.DrawDictionary<ResourceItem> (
             "Texture", dictResourceTexture, ref isFoldoutTexture,
             (int count, string key, ResourceItem resourceItem) => {
-                isFoldoutTextureSet [key] = EditorGUILayout.Foldout (isFoldoutTextureSet [key], key);
-                if (isFoldoutTextureSet [key] == true)
+                isFoldoutTextureSet [count] = EditorGUILayout.Foldout (isFoldoutTextureSet [count], key);
+                if (isFoldoutTextureSet [count] == true)
                 {
                     EditorGUI.indentLevel ++;
                     EditorGUILayout.IntField ("referenctCount", resourceItem.referenceCount);
