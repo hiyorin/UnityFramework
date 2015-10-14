@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Framework;
 using Framework.Scene;
-//using Framework.Resource;
+using Framework.Resource;
 using DG.Tweening;
 
 public sealed class EntryPoint
@@ -13,7 +13,7 @@ public sealed class EntryPoint
 //        SceneManager.Instance.AddIgnoreCollection (fingerGestures.name);
 
         SceneManager.GetInstance ();
-//        ResourceManager.GetInstance ();
+        ResourceManager.GetInstance ();
         CameraManager.GetInstance ();
 
         SceneManager.Instance.AddIgnoreCollection ("[DOTween]");

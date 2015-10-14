@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEngine;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -25,19 +24,19 @@ public class EditorUtilityEx : Editor
         }
     }
 
-    public static void DrawDictionary<T> (string label, Dictionary<string, T> dict, ref bool isFoldout, Action<string, T> callback=null)
+    public static void DrawDictionary<T> (string label, Dictionary<string, T> dict, ref bool isFoldout, Action<int, string, T> callback=null)
     {
         isFoldout = EditorGUILayout.Foldout (isFoldout, label);
         if (isFoldout == true)
         {
             EditorGUI.indentLevel ++;
             EditorGUILayout.IntField ("Size", dict.Count);
-            foreach (var key in dict.Keys)
+            foreach (var row in dict.Keys.Select ((key, index) => new {key, index}))
             {
-                if (DrawValue<T> (key, dict [key]) == false)
+                if (DrawValue<T> (row.key, dict [row.key]) == false)
                 {
                     if (callback != null)
-                        callback.Invoke (key, dict [key]);
+                        callback.Invoke (row.index, row.key, dict [row.key]);
                 }
             }
             EditorGUI.indentLevel --;
