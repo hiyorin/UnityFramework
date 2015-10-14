@@ -10,6 +10,8 @@ namespace Framework.Scene
         ExampleSceneManager_A,
         ExampleSceneManager_B,
         ExampleSceneManager_C,
+        ExampleResourceManager_A,
+        ExampleResourceManager_B,
     }
 
     public enum SceneType
