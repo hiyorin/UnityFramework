@@ -49,12 +49,19 @@ public class SceneManagerSettings : ScriptableObject
 	}
 #endif
 
-    [SerializeField]
+    [Header ("Screen Settings")]
+    [SerializeField, Label ("Width")]
     private uint _screenWidth = 1080;
-    [SerializeField]
+    [SerializeField, Label ("Height")]
     private uint _screenHeight = 1920;
-    [SerializeField]
+    [SerializeField, LabelRange ("MacthWidthOrHeight", 0.0f, 1.0f)]
     private float _screenMatchWidthOrHeight = 0.0f;
+
+    [Header ("Build Settings"), Space]
+    [SerializeField, FilterFileExtension ("unity")]
+    private DefaultAsset[] _listBuildInScene = new DefaultAsset[] {};
+
+    [Space]
     [SerializeField]
     private string[] _listCollectionIgnoreObjectName = new string[] {};
     [SerializeField]
@@ -63,64 +70,6 @@ public class SceneManagerSettings : ScriptableObject
     private string[] _listResidentSceneName = new string[] {};
     [SerializeField]
     private string[] _listFirstLoadTaskSceneName = new string[] {};
-
-#if UNITY_EDITOR
-    public uint screenWidth {
-        set {
-            _screenWidth = value;
-            DirtyEditor ();
-        }
-        get { return _screenWidth; }
-    }
-
-    public uint screenHeight {
-        set {
-            _screenHeight = value;
-            DirtyEditor ();
-        }
-        get { return _screenHeight; }
-    }
-
-    public float screenMatchWidthOrHeight {
-        set {
-            _screenMatchWidthOrHeight = value;
-            DirtyEditor ();
-        }
-        get { return _screenMatchWidthOrHeight; }
-    }
-
-	public string[] listCollectionIgnoreObjectName {
-        set {
-            _listCollectionIgnoreObjectName = value;
-            DirtyEditor ();
-        }
-		get { return _listCollectionIgnoreObjectName; }
-	}
-
-	public string[] listStaticSceneName {
-		set {
-            _listStaticSceneName = value;
-            DirtyEditor ();
-        }
-		get { return _listStaticSceneName; }
-	}
-
-    public string[] listResidentSceneName {
-        set {
-            _listResidentSceneName = value;
-            DirtyEditor ();
-        }
-        get { return _listResidentSceneName; }
-    }
-
-	public string[] listFirstLoadTaskSceneName {
-		set {
-            _listFirstLoadTaskSceneName = value;
-            DirtyEditor ();
-        }
-		get { return _listFirstLoadTaskSceneName; }
-	}
-#endif
 
     public static uint ScreenWidth {
         get { return Instance ()._screenWidth; }
@@ -132,6 +81,10 @@ public class SceneManagerSettings : ScriptableObject
 
     public static float ScreenMatchWidthOrHeight {
         get { return Instance ()._screenMatchWidthOrHeight; }
+    }
+
+    public static DefaultAsset[] ListBuildInScene {
+        get { return Instance ()._listBuildInScene; }
     }
 
 	public static string[] ListCollectionIgnoreObjectName {

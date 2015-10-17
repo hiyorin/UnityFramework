@@ -14,6 +14,9 @@ MonoBehaviour:
   _screenWidth: 1080
   _screenHeight: 1920
   _screenMatchWidthOrHeight: 0
+  _listBuildInScene:
+  - {fileID: 102900000, guid: 55c99a7612dda4266a557c505fe70d73, type: 3}
+  - {fileID: 102900000, guid: 8f6ee2d4b8b044af1918da0cbdd2d850, type: 3}
   _listCollectionIgnoreObjectName: []
   _listStaticSceneName: []
   _listResidentSceneName:
