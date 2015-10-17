@@ -40,13 +40,13 @@ namespace Framework.UI
             private set;
             get;
         }
-
+#if UNITY_EDITOR
         protected override void Reset ()
         {
             base.Reset ();
             ResetCanvas ();
         }
-
+#endif
         protected override void Awake ()
         {
             base.Awake ();
