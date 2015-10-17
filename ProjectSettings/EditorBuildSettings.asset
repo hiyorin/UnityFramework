@@ -19,3 +19,5 @@ EditorBuildSettings:
     path: Assets/Example/ResourceManager/Scenes/ExampleResourceManager_A.unity
   - enabled: 1
     path: Assets/Example/ResourceManager/Scenes/ExampleResourceManager_B.unity
+  - enabled: 1
+    path: Assets/Example/ResourceManager/Scenes/ExampleResourceManager_C.unity

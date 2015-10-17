@@ -1,20 +1,29 @@
 ﻿using UnityEditor;
+using UnityEngine;
 using System.IO;
 
-public class CreateAssetBundles
+public class Build
 {
-    [MenuItem ("Tools/Resource/Build AssetBundles (Standalone)")]
+    [MenuItem ("Tools/Build/AssetBundles (Standalone)")]
     private static void BuildAllAssetBundlesStandalone ()
     {
         string outputPath = ResourceManagerSettings.StancaloneAssetBundleOutputPath;
         BuildAllAssetBundles (outputPath);
     }
 
-    [MenuItem ("Tools/Resource/Build AssetBundles (Production)")]
+    [MenuItem ("Tools/Build/AssetBundles (Production)")]
     private static void BuildAllAssetBundlesProduction ()
     {
         string outputPath = ResourceManagerSettings.ProductionAssetBundleOutputPath;
         BuildAllAssetBundles (outputPath);
+    }
+
+    [MenuItem ("Tools/Build/Draw Build AssetBindles")]
+    private static void DrawBuildAllAssetBundles ()
+    {
+        string[] assetBundleNames = AssetDatabase.GetAllAssetBundleNames ();
+        for (var i = 0; i < assetBundleNames.Length; i++)
+            Debug.LogFormat ("{0} : {1}", i.ToString ("000"), assetBundleNames [i]);
     }
 
     private static void BuildAllAssetBundles (string outputPath)
@@ -37,4 +46,16 @@ public class CreateAssetBundles
             EditorUserBuildSettings.activeBuildTarget
         );
     }
+
+//    [MenuItem ("Tools/Test")]
+//    private static void Test ()
+//    {
+//        foreach (var assetBundleName in AssetDatabase.GetAllAssetBundleNames ())
+//        {
+//            foreach (var assetName in AssetDatabase.GetAssetPathsFromAssetBundle (assetBundleName))
+//            {
+//                Debug.Log (assetBundleName + " : " + assetName);
+//            }
+//        }
+//    }
 }

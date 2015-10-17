@@ -7,7 +7,7 @@
         Texture,
     }
 
-    public class ResourceRequestItem
+    public class ResourceRequestItem : BaseResourceRequest
     {
         public readonly string url;
         public readonly ResourceType type;
