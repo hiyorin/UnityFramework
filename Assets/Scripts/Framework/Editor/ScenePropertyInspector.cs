@@ -146,7 +146,7 @@ public class ScenePropertyInspector : Editor
                 continue;
             if (sceneName.Equals (currentSceneName) == true)
                 continue;
-            if (SceneManagerSettings.ListResidentSceneName.Contains (sceneName) == true)
+            if (SceneManagerSettings.ListResidentScene.Contains (sceneName) == true)
                 continue;
             
             EditorGUILayout.BeginHorizontal ();

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.IO;
+using UniLinq;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -57,17 +58,17 @@ public class SceneManagerSettings : ScriptableObject
     [SerializeField, LabelRange ("MacthWidthOrHeight", 0.0f, 1.0f)]
     private float _screenMatchWidthOrHeight = 0.0f;
 
-    [Header ("Build Settings"), Space]
+    [Header ("Build Settings")]
     [SerializeField, FilterFileExtension ("unity")]
     private DefaultAsset[] _listBuildInScene = new DefaultAsset[] {};
 
-    [Space]
+    [Header ("Scene Settings")]
     [SerializeField]
     private string[] _listCollectionIgnoreObjectName = new string[] {};
+    [SerializeField, FilterFileExtension ("unity")]
+    private DefaultAsset[] _listStaticScene = new DefaultAsset[] {};
     [SerializeField]
-    private string[] _listStaticSceneName = new string[] {};
-    [SerializeField]
-    private string[] _listResidentSceneName = new string[] {};
+    private DefaultAsset[] _listResidentScene = new DefaultAsset[] {};
     [SerializeField]
     private string[] _listFirstLoadTaskSceneName = new string[] {};
 
@@ -83,20 +84,20 @@ public class SceneManagerSettings : ScriptableObject
         get { return Instance ()._screenMatchWidthOrHeight; }
     }
 
-    public static DefaultAsset[] ListBuildInScene {
-        get { return Instance ()._listBuildInScene; }
+    public static string[] ListBuildInScene {
+        get { return Instance ()._listBuildInScene.Select (x => x.name).ToArray (); }
     }
 
 	public static string[] ListCollectionIgnoreObjectName {
-        get { return Instance ()._listCollectionIgnoreObjectName; }
+        get { return Instance ()._listCollectionIgnoreObjectName.ToArray (); }
 	}
 
-	public static string[] ListStaticSceneName {
-        get { return Instance ()._listStaticSceneName; }
+	public static string[] ListStaticScene {
+        get { return Instance ()._listStaticScene.Select (x => x.name).ToArray (); }
 	}
 
-    public static string[] ListResidentSceneName {
-        get { return Instance ()._listResidentSceneName; }
+    public static string[] ListResidentScene {
+        get { return Instance ()._listResidentScene.Select (x => x.name).ToArray (); }
     }
 
 	public static string[] ListFirstLoadTaskSceneName {
