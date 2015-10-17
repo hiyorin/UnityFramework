@@ -42,7 +42,7 @@ namespace Framework.UI
         public bool isRootCanvas {
             get { return canvas.isRootCanvas; }
         }
-
+#if UNITY_EDITOR
         protected override void Reset ()
         {
             base.Reset ();
@@ -82,7 +82,7 @@ namespace Framework.UI
                 new Vector2 (SceneManagerSettings.ScreenWidth, SceneManagerSettings.ScreenHeight);
             canvasScaler.matchWidthOrHeight = SceneManagerSettings.ScreenMatchWidthOrHeight;
 		}
-
+#endif
 		protected override void Start ()
 		{
 			base.Start ();
