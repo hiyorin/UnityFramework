@@ -60,15 +60,15 @@ public class SceneManagerSettings : ScriptableObject
 
     [Header ("Build Settings")]
     [SerializeField, FilterFileExtension ("unity")]
-    private DefaultAsset[] _listBuildInScene = new DefaultAsset[] {};
+    private Object[] _listBuildInScene = new Object[] {};
 
     [Header ("Scene Settings")]
     [SerializeField]
     private string[] _listCollectionIgnoreObjectName = new string[] {};
     [SerializeField, FilterFileExtension ("unity")]
-    private DefaultAsset[] _listStaticScene = new DefaultAsset[] {};
+    private Object[] _listStaticScene = new Object[] {};
     [SerializeField]
-    private DefaultAsset[] _listResidentScene = new DefaultAsset[] {};
+    private Object[] _listResidentScene = new Object[] {};
     [SerializeField]
     private string[] _listFirstLoadTaskSceneName = new string[] {};
 
@@ -84,7 +84,11 @@ public class SceneManagerSettings : ScriptableObject
         get { return Instance ()._screenMatchWidthOrHeight; }
     }
 
-    public static string[] ListBuildInScene {
+    public static Object[] ListBuidlInScene {
+        get { return Instance ()._listBuildInScene.ToArray (); }
+    }
+
+    public static string[] ListBuildInSceneName {
         get { return Instance ()._listBuildInScene.Select (x => x.name).ToArray (); }
     }
 
@@ -92,11 +96,11 @@ public class SceneManagerSettings : ScriptableObject
         get { return Instance ()._listCollectionIgnoreObjectName.ToArray (); }
 	}
 
-	public static string[] ListStaticScene {
+	public static string[] ListStaticSceneName {
         get { return Instance ()._listStaticScene.Select (x => x.name).ToArray (); }
 	}
 
-    public static string[] ListResidentScene {
+    public static string[] ListResidentSceneName {
         get { return Instance ()._listResidentScene.Select (x => x.name).ToArray (); }
     }
 

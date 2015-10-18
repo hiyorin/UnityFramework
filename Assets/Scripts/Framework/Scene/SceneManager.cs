@@ -67,7 +67,7 @@ namespace Framework.Scene
             _sceneNodeSet.Next (sceneNode.name, false);
 
             if (_loadStaticSceneProcess == null)
-                _loadStaticSceneProcess = LoadFirstSceneProcess (sceneNode, SceneManagerSettings.ListStaticScene, SceneManagerSettings.ListResidentScene);
+                _loadStaticSceneProcess = LoadFirstSceneProcess (sceneNode, SceneManagerSettings.ListStaticSceneName, SceneManagerSettings.ListResidentSceneName);
             else
                 Debug.LogErrorFormat ("{0} sceneLoader not initialized.", typeof(SceneManager).Name);
         }
