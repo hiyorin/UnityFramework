@@ -11,5 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529536ca100474928874ed45343cb2bf, type: 3}
   m_Name: ResourceManagerSettings
   m_EditorClassIdentifier: 
+  _assetBundleMode: 0
+  _assetBundleSourceDirectory: Assets/Example/ResourceManager/AssetBundles/
   _standaloneAssetBundleOutputPath: Assets/StreamingAssets/
   _productionAssetBundleOutoutPath: AssetBundles/
+  _crcFileName: CRC.json

@@ -23,6 +23,7 @@ namespace Framework.Resource
             _resource = resource;
             _referenceCount = 1;
         }
+
         public void IncRef ()
         {
             _referenceCount++;

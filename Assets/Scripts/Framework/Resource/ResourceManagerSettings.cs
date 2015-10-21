@@ -49,11 +49,34 @@ public class ResourceManagerSettings : ScriptableObject
     }
 #endif
 
-    [SerializeField, Header ("AssetBundle")]
+    [System.Serializable]
+    public enum AssetBundleMode
+    {
+#if UNITY_EDITOR
+        Simulater,
+#endif
+        StreamingAssets,
+        Server,
+    }
+
+    [Header ("AssetBundle")]
+    [SerializeField, Label ("Mode")]
+    private AssetBundleMode _assetBundleMode = AssetBundleMode.StreamingAssets;
+    public static AssetBundleMode AssetBundleModeType { get { return Instance ()._assetBundleMode; } }
+
+    [SerializeField, Label ("Src Directory")]
+    private string _assetBundleSourceDirectory = "Assets/AssetBundles/";
+    public static string AssetBundleSourceDirectory { get { return Instance ()._assetBundleSourceDirectory; } }
+
+    [SerializeField, Label ("Dest Directory Develop")]
     private string _standaloneAssetBundleOutputPath = "Assets/StreamingAssets/";
     public static string StancaloneAssetBundleOutputPath { get { return Instance ()._standaloneAssetBundleOutputPath; } }
 
-    [SerializeField]
+    [SerializeField, Label ("Dest Directory Production")]
     private string _productionAssetBundleOutoutPath = "AssetBundles/";
     public static string ProductionAssetBundleOutputPath { get { return Instance ()._productionAssetBundleOutoutPath; } }
+
+    [SerializeField, Label ("Dest CRC FileName")]
+    private string _crcFileName = "CRC.json";
+    public static string CRCFileName { get { return Instance ()._crcFileName; } }
 }

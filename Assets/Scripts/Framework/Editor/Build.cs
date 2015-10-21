@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using Framework;
+using LitJson;
 
 public class Build
 {
@@ -112,33 +114,70 @@ public class Build
 
     private static void BuildAllAssetBundles (string outputPath)
     {
+        // Check Output Directory
         string targetFolderName = EditorUserBuildSettings.activeBuildTarget.ToString ();
         string properPath = Path.Combine (outputPath, targetFolderName);
-        string[] splitPath = properPath.Split (Path.PathSeparator);
-        string path = string.Empty;
-        foreach (var row in splitPath)
+        if (FileUtility.CreateDirectory (properPath) == false)
         {
-            path = Path.Combine (path, row);
-            if (Directory.Exists (path) == false)
-                Directory.CreateDirectory (path);
+            Debug.LogErrorFormat ("Output Directory Error path={0}", properPath);
+            return;
         }
-        BuildPipeline.BuildAssetBundles (
+
+        // Check Source Directory
+        string sourceDirectory = ResourceManagerSettings.AssetBundleSourceDirectory;
+        if (Directory.Exists (sourceDirectory) == false)
+        {
+            Debug.LogErrorFormat ("Source Directory Error path={0}", sourceDirectory);
+            return;
+        }
+
+        // Create Build Asset List
+        List<AssetBundleBuild> listAssetBunle = new List<AssetBundleBuild> ();
+        foreach (var assetName in AssetDatabase.GetAllAssetPaths ())
+        {
+            if (assetName.StartsWith (sourceDirectory) == false)
+                continue;
+            if (assetName.EndsWith (".cs") == true || assetName.EndsWith (".js") == true || assetName.EndsWith (".boo") == true)
+                continue;
+            if (AssetDatabase.IsValidFolder (assetName) == true)
+                continue;
+
+            string assetBundleName = assetName.Substring (sourceDirectory.Length, assetName.LastIndexOf ('.') - sourceDirectory.Length);
+            AssetBundleBuild build = new AssetBundleBuild ();
+            build.assetBundleName = assetBundleName;
+            build.assetNames = new string[] { assetName };
+
+            listAssetBunle.Add (build);
+            Debug.LogFormat ("Build Asset : {0}", assetBundleName);
+        }
+
+        // Create AssetBundles
+        AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles (
             properPath,
+            listAssetBunle.ToArray (),
             BuildAssetBundleOptions.None,
             EditorUserBuildSettings.activeBuildTarget
         );
         Debug.Log ("Build AssetBundle Complete");
-    }
 
-//    [MenuItem ("Tools/Test")]
-//    private static void Test ()
-//    {
-//        foreach (var assetBundleName in AssetDatabase.GetAllAssetBundleNames ())
-//        {
-//            foreach (var assetName in AssetDatabase.GetAssetPathsFromAssetBundle (assetBundleName))
-//            {
-//                Debug.Log (assetBundleName + " : " + assetName);
-//            }
-//        }
-//    }
+        // Create CRC File
+        Dictionary<string, uint> dictCRC = new Dictionary<string, uint> ();
+        foreach (var assetBundle in manifest.GetAllAssetBundles ())
+        {
+            uint crc = 0;
+            if (BuildPipeline.GetCRCForAssetBundle (Path.Combine (properPath, assetBundle), out crc))
+            {
+                dictCRC.Add (assetBundle, crc);
+                Debug.LogFormat ("CRC : {0} {1}", crc, assetBundle);
+            }
+        }
+
+        string json = JsonMapper.ToJson (dictCRC);
+        using (StreamWriter stream = File.CreateText (Path.Combine (properPath, ResourceManagerSettings.CRCFileName)))
+        {
+            stream.Write (json);
+            stream.Close ();
+        }
+        Debug.Log ("Created CRD Json Complete");
+    }
 }
