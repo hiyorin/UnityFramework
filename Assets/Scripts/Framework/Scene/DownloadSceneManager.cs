@@ -31,6 +31,7 @@ public class DownloadSceneManager : SingletonSceneBase<DownloadSceneManager>
     public override bool OnSceneCreate ()
     {
         _canvasGroup.alpha = 0.0f;
+        _imgBackground.enabled = false;
         return true;
     }
 
