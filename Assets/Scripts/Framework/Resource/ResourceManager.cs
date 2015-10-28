@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using Framework.Scene;
 using Framework.Resource.Loader;
+using UniLinq;
 
 namespace Framework.Resource
 {
@@ -23,6 +24,7 @@ namespace Framework.Resource
         private readonly Dictionary<string, ResourceItem> _dictResourceAssetBundle = new Dictionary<string, ResourceItem> ();
         private readonly Dictionary<string, ResourceItem> _dictResourceTexture = new Dictionary<string, ResourceItem> ();
         private readonly Dictionary<string, BaseLoader> _dictLoader = new Dictionary<string, BaseLoader> ();
+        private readonly List<BaseLoader> _listSelfLoader = new List<BaseLoader> ();
 
         public string assetBundleDomain { private set; get; }
         public AssetBundleManifest assetBundleManifest { private set; get; }
@@ -50,9 +52,41 @@ namespace Framework.Resource
             SceneManager.Instance.RemoveIgnoreCollection (gameObject.name);
         }
 
+        private bool IsCompleteLoader (BaseLoader loader)
+        {
+            if (loader.isComplete == false)
+                return false;
+
+            if (loader.isSuccessed == true)
+            {
+                CollectAssetFromLoader (loader);
+            }
+            else
+            {
+                Debug.LogError ("Error");
+            }
+
+            return true;
+        }
+
         protected override void Update ()
         {
             base.Update ();
+
+            int selfLoaderIndex = 0;
+            while (_listSelfLoader.Count > selfLoaderIndex)
+            {
+                var loader = _listSelfLoader [selfLoaderIndex];
+                loader.MoveNext ();
+                if (IsCompleteLoader (loader) == true)
+                {
+                    _listSelfLoader.Remove (loader);
+                }
+                else
+                {
+                    selfLoaderIndex++;
+                }
+            }
 
             foreach (var loader in _dictLoader.Values)
             {
@@ -79,13 +113,10 @@ namespace Framework.Resource
                         }
                         else
                         {
-                            Debug.LogError ("Error");
+                            Debug.LogError (loader.error + "\n" + loader.path);
                         }
-
-                        _dictLoader.Remove (request.url);
+                        completeCount++;
                     }
-
-                    completeCount++;
                 }
 
                 if (requestSet.Count () <= completeCount)
@@ -97,8 +128,14 @@ namespace Framework.Resource
         {
             if (loader is AssetBundleLoader)
             {
-                ResourceItem r = new ResourceItem (((AssetBundleLoader)loader).asset);
-                _dictResourceAsset.Add (loader.path, r);
+                AssetBundleLoader assetBundleLoader = loader as AssetBundleLoader;
+                if (assetBundleLoader.asset != null)
+                    _dictResourceAssetBundle.Add (loader.path, new ResourceItem (assetBundleLoader.asset));
+                foreach (var sub in assetBundleLoader.assetDependencies)
+                {
+                    if (sub.asset != null)
+                        _dictResourceAsset.Add (sub.path, new ResourceItem (sub.asset));
+                }
             }
             else if (loader is AssetBundleManifestLoader)
             {
@@ -128,22 +165,26 @@ namespace Framework.Resource
         {
             assetBundleManifest = null;
             BaseLoader loader = BaseLoader.Init<AssetBundleManifestLoader> ("AssetBundleManifest");
-            _dictLoader.Add ("AssetBundleManifest", loader);
+            _listSelfLoader.Add (loader);
+        }
+
+        public bool IsAssetBundleManifestExists ()
+        {
+            return assetBundleManifest != null;
         }
 
         public void LoadAssetBundleCRC ()
         {
             _dictAssetBundleCRC = null;
             BaseLoader loader = BaseLoader.Init<AssetBundleCRCLoader> ("AssetBundleCRC");
-            _dictLoader.Add ("AssetBundleCRC", loader);
+            _listSelfLoader.Add (loader);
         }
 
-        /// <summary>
-        /// リクエストの登録
-        /// </summary>
-        /// <returns><c>true</c>, if request set was registered, <c>false</c> otherwise.</returns>
-        /// <param name="label">Label.</param>
-        /// <param name="resourceSet">Resource set.</param>
+        public bool IsAssetBundleCRCExists ()
+        {
+            return _dictAssetBundleCRC != null;
+        }
+
         public bool RegisterRequestSet (string label, ResourceRequestSet resourceSet)
         {
             if (_dictRequestSet.ContainsKey (label) == true)
@@ -163,7 +204,8 @@ namespace Framework.Resource
                         loader = BaseLoader.Init<AssetLoader> (requestItem.url);
                     break;
                 case ResourceType.AssetBundle:
-                    RegisterRequestAssetBundle (requestItem.url);
+                    if (_dictResourceAssetBundle.TryGetValue (requestItem.url, out resourceItem) == false)
+                        loader = BaseLoader.Init<AssetBundleLoader> (requestItem.url);
                     break;
                 case ResourceType.Texture:
                     if (_dictResourceTexture.TryGetValue (requestItem.url, out resourceItem) == false)
@@ -183,46 +225,6 @@ namespace Framework.Resource
             return true;
         }
 
-        private bool RegisterRequestAssetBundle (string path)
-        {
-            if (assetBundleManifest == null)
-                return false;
-            
-            ResourceItem resourceItem = null;
-
-            foreach (var dependency in assetBundleManifest.GetAllDependencies (path))
-            {
-                if (_dictLoader.ContainsKey (dependency) == true)
-                    continue;
-                
-                if (_dictResourceAssetBundle.TryGetValue (dependency, out resourceItem) == true)
-                    resourceItem.IncRef ();
-                else
-                {
-                    BaseLoader loader = BaseLoader.Init<AssetBundleLoader> (dependency);
-                    _dictLoader.Add (dependency, loader);
-                }
-            }
-
-            if (_dictLoader.ContainsKey (path) == false)
-            {
-                if (_dictResourceAssetBundle.TryGetValue (path, out resourceItem) == false)
-                    resourceItem.IncRef ();
-                else
-                {
-                    BaseLoader loader = BaseLoader.Init<AssetBundleLoader> (path);
-                    _dictLoader.Add (path, loader);
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// リクエストの削除
-        /// </summary>
-        /// <returns><c>true</c>, if request set was unregistered, <c>false</c> otherwise.</returns>
-        /// <param name="label">Label.</param>
         public bool UnregisterRequestSet (string label)
         {
             ResourceRequestSet requestSet = null;
@@ -231,10 +233,76 @@ namespace Framework.Resource
 
             requestSet.Stop ();
 
-            // TODO
+            foreach (var request in requestSet.GetList ())
+            {
+                ResourceItem res = null;
+                switch (request.type)
+                {
+                case ResourceType.Asset:
+                    RemoveAsset (request.url);
+                    break;
+                case ResourceType.AssetBundle:
+                    RemoveAssetBundle (request.url);
+                    foreach (var dependency in assetBundleManifest.GetDirectDependencies (request.url))
+                        RemoveAssetBundle (dependency);
+                    break;
+                case ResourceType.Texture:
+                    RemoveTexture (request.url);
+                    break;
+                default:
+                    Debug.LogErrorFormat ("{0} {1} NotFound {2}", typeof(ResourceManager).Name, MethodBase.GetCurrentMethod ().Name, request.type);
+                    break;
+                }
+            }
 
             _dictRequestSet.Remove (label);
             return true;
+        }
+
+        private void RemoveAsset (string path)
+        {
+            ResourceItem res = null;
+            if (_dictResourceAsset.TryGetValue (path, out res) == false)
+            {
+                Debug.LogErrorFormat ("RemoveAsset not loaded path={0}", path);
+                return;
+            }
+
+            RemoveResource (path, res);
+        }
+
+        private void RemoveAssetBundle (string path)
+        {
+            ResourceItem res = null;
+            if (_dictResourceAssetBundle.TryGetValue (path, out res) == false)
+            {
+                Debug.LogErrorFormat ("RemoveAssetBundle not loaded path={0}", path);
+                return;
+            }
+
+            RemoveResource (path, res);
+        }
+
+        private void RemoveTexture (string path)
+        {
+            ResourceItem res = null;
+            if (_dictResourceTexture.TryGetValue (path, out res) == false)
+            {
+                Debug.LogErrorFormat ("RemoveTexture not loaded path={0}", path);
+                return;
+            }
+
+            RemoveResource (path, res);
+        }
+
+        private void RemoveResource (string path, ResourceItem res)
+        {
+            res.DecRef ();
+            if (res.referenceCount > 0)
+                return;
+
+            _dictResourceAssetBundle.Remove (path);
+            Object.Destroy (res.resource);
         }
 
         private bool IsLoadedExist (string url, ResourceType type)
@@ -268,24 +336,39 @@ namespace Framework.Resource
             return IsLoadedExist (url, ResourceType.Texture);
         }
 
+        public bool Contains (string path, ResourceType type)
+        {
+            if (IsLoadedExist (path, type) == true)
+                return true;
+
+            BaseLoader loader = null;
+            if (_dictLoader.TryGetValue (path, out loader) == true)
+                return true;
+
+            return loader.Contains (path);
+        }
+
         public Object GetAsset (string url)
         {
             ResourceItem resource = null;
-            _dictResourceAsset.TryGetValue (url, out resource);
+            if (_dictResourceAsset.TryGetValue (url, out resource) == false)
+                return null;
             return resource.resource;
         }
 
         public Object GetAssetBundle (string path)
         {
             ResourceItem resource = null;
-            _dictResourceAssetBundle.TryGetValue (path, out resource);
+            if (_dictResourceAssetBundle.TryGetValue (path, out resource) == false)
+                return null;
             return resource.resource;
         }
 
         public Texture2D GetTexture (string url)
         {
             ResourceItem resource = null;
-            _dictResourceTexture.TryGetValue (url, out resource);
+            if (_dictResourceTexture.TryGetValue (url, out resource) == false)
+                return null;
             return resource.resource as Texture2D;
         }
     }

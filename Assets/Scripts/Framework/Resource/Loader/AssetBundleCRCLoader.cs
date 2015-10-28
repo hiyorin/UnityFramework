@@ -10,7 +10,7 @@ namespace Framework.Resource.Loader
     {
         public Dictionary<string, uint> crcDict { private set; get; }
 
-        protected override IEnumerator GenerateLoadProcess (string path)
+        protected override IEnumerator GenerateLoadProcess ()
         {
             string target = GetPlatformFolderForAssetBundles ();
             string baseUrl = Path.Combine (ResourceManager.Instance.assetBundleDomain, target);
@@ -18,9 +18,9 @@ namespace Framework.Resource.Loader
             string crcUrl = Path.Combine (baseUrl, ResourceManagerSettings.CRCFileName);
             using (WWW www = new WWW (crcUrl))
             {
-                yield return www;
                 while (www.progress < 1.0f || www.isDone == false)
                 {
+                    progress = www.progress;
                     yield return null;
                 }
                 if (string.IsNullOrEmpty (www.text) == true)

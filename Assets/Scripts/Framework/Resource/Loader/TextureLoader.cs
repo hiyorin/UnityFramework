@@ -7,13 +7,13 @@ namespace Framework.Resource.Loader
     {
         public Texture2D texture { private set; get; }
 
-        protected override IEnumerator GenerateLoadProcess (string path)
+        protected override IEnumerator GenerateLoadProcess ()
         {
             using (WWW www = new WWW (path))
             {
-                yield return www;
                 while (www.progress < 1.0f || www.isDone == false)
                 {
+                    progress = www.progress;
                     yield return null;
                 }
 

@@ -27,6 +27,7 @@ namespace Framework.Resource.Loader
 
         public string path { private set; get; }
         public LoaderState state { private set; get; }
+        public float progress { protected set; get; }
         public string error { private set; get; }
 
         protected BaseLoader ()
@@ -46,7 +47,7 @@ namespace Framework.Resource.Loader
             get { return state == LoaderState.Failed; }
         }
 
-        protected abstract IEnumerator GenerateLoadProcess (string path);
+        protected abstract IEnumerator GenerateLoadProcess ();
 
         public bool MoveNext ()
         {
@@ -56,6 +57,11 @@ namespace Framework.Resource.Loader
             return _iterator.MoveNext ();
         }
 
+        public virtual bool Contains (string path)
+        {
+            return this.path.Equals (path);
+        }
+
         private bool Load (string path)
         {
             if (_iterator != null)
@@ -63,7 +69,7 @@ namespace Framework.Resource.Loader
             
             this.path = path;
             this.state = LoaderState.Connecting;
-            _iterator = GenerateLoadProcess (path);
+            _iterator = GenerateLoadProcess ();
 
             return true;
         }

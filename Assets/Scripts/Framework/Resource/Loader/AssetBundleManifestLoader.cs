@@ -7,7 +7,8 @@ namespace Framework.Resource.Loader
     public class AssetBundleManifestLoader : BaseLoader
     {
         public AssetBundleManifest assetBundleManifest { private set; get; }
-        protected override IEnumerator GenerateLoadProcess (string path)
+
+        protected override IEnumerator GenerateLoadProcess ()
         {
             string target = GetPlatformFolderForAssetBundles ();
             string baseUrl = Path.Combine (ResourceManager.Instance.assetBundleDomain, target);
@@ -15,9 +16,9 @@ namespace Framework.Resource.Loader
             string manifestUrl = Path.Combine (baseUrl, target);
             using (WWW www = new WWW (manifestUrl))
             {
-                yield return www;
                 while (www.progress < 1.0f || www.isDone == false)
                 {
+                    progress = www.progress;
                     yield return null;
                 }
                 if (www.assetBundle == null)

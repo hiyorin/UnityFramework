@@ -17,9 +17,11 @@ MonoBehaviour:
   _listBuildInScene:
   - {fileID: 102900000, guid: 55c99a7612dda4266a557c505fe70d73, type: 3}
   - {fileID: 102900000, guid: 8f6ee2d4b8b044af1918da0cbdd2d850, type: 3}
+  - {fileID: 102900000, guid: ed140df5e09b746e6a509fd84cb1e716, type: 3}
   _listCollectionIgnoreObjectName: []
   _listStaticScene: []
   _listResidentScene:
   - {fileID: 102900000, guid: 55c99a7612dda4266a557c505fe70d73, type: 3}
   - {fileID: 102900000, guid: 8f6ee2d4b8b044af1918da0cbdd2d850, type: 3}
+  - {fileID: 102900000, guid: ed140df5e09b746e6a509fd84cb1e716, type: 3}
   _listFirstLoadTaskSceneName: []

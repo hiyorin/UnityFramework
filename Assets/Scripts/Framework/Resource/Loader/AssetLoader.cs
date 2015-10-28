@@ -7,12 +7,15 @@ namespace Framework.Resource.Loader
     {
         public Object asset { private set; get; }
 
-        protected override IEnumerator GenerateLoadProcess (string path)
+        protected override IEnumerator GenerateLoadProcess ()
         {
             ResourceRequest request = Resources.LoadAsync (path);
             request.allowSceneActivation = false;
             while (request.progress < 0.9f && request.isDone == false)
+            {
+                progress = request.progress;
                 yield return null;
+            }
             request.allowSceneActivation = true;
 
             if (request.asset == null)

@@ -20,6 +20,8 @@ namespace Framework.UI
 
 		[SerializeField]
 		private Type m_type = Type.UI;
+        [SerializeField]
+        private int m_depth = 0;
 
 		private Canvas m_canvas;
 		protected Canvas canvas {
@@ -69,11 +71,13 @@ namespace Framework.UI
             case Type.Transition:
                 canvas.sortingOrder = 2000;
                 break;
-			default:
+            default:
+                canvas.sortingOrder = 0;
 				Debug.LogError (m_type);
 				break;
 			}
 
+            canvas.sortingOrder += m_depth;
             canvas.renderMode = RenderMode.ScreenSpaceCamera;
 
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;

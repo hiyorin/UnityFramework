@@ -10,12 +10,12 @@ namespace Framework.Resource.Loader
     {
         public Object asset { private set; get; }
 
-        protected override IEnumerator GenerateLoadProcess (string path)
+        protected override IEnumerator GenerateLoadProcess ()
         {
             string srcDir = ResourceManagerSettings.AssetBundleSourceDirectory;
-            path = Path.Combine (srcDir, path);
+            string localPath = Path.Combine (srcDir, path);
 
-            asset = AssetDatabase.LoadMainAssetAtPath (path);
+            asset = AssetDatabase.LoadMainAssetAtPath (localPath);
             if (asset == null)
             {
                 Failed ("NotFound");

@@ -21,7 +21,7 @@ public class ExampleResourceManager_C : SceneBase
         switch (createState)
         {
         case CreateState.ResourceRequest:
-            resourceRequestSet.Add ("prefab", ResourceType.AssetBundle);
+            resourceRequestSet.Add ("cube", ResourceType.AssetBundle);
             ResourceManager.Instance.RegisterRequestSet (
                 RequestResourceLabel, resourceRequestSet);
             createState = CreateState.ResourceRequestWait;
@@ -29,17 +29,24 @@ public class ExampleResourceManager_C : SceneBase
         case CreateState.ResourceRequestWait:
             if (resourceRequestSet.IsComplete () == true)
             {
-                Object prefab = ResourceManager.Instance.GetAssetBundle ("prefab");
+                Debug.Log ("Comp");
+                Object prefab = ResourceManager.Instance.GetAssetBundle ("cube");
+                Debug.Log (prefab);
                 Object.Instantiate (prefab);
                 createState = CreateState.Complete;
             }
             break;
         case CreateState.Complete:
             createState = CreateState.ResourceRequest;
-            break;
+            return true;
         default:
             break;
         }
-        return true;
+        return false;
+    }
+
+    public override void OnSceneDestroy ()
+    {
+        ResourceManager.Instance.UnregisterRequestSet (RequestResourceLabel);
     }
 }
