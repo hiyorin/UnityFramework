@@ -372,6 +372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 622811063}
+  _imgBackground: {fileID: 869152801}
   _slider: {fileID: 2107285189}
   _textValue: {fileID: 1982771626}
   _textMax: {fileID: 2126173007}

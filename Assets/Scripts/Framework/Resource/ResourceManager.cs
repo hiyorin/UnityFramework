@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using Framework.Scene;
 using Framework.Resource.Loader;
-using UniLinq;
 
 namespace Framework.Resource
 {
@@ -128,6 +127,8 @@ namespace Framework.Resource
         {
             if (loader is AssetBundleLoader)
             {
+                if (_dictResourceAssetBundle.ContainsKey (loader.path) == true)
+                    return;
                 AssetBundleLoader assetBundleLoader = loader as AssetBundleLoader;
                 if (assetBundleLoader.asset != null)
                     _dictResourceAssetBundle.Add (loader.path, new ResourceItem (assetBundleLoader.asset));
@@ -147,11 +148,15 @@ namespace Framework.Resource
             }
             else if (loader is TextureLoader)
             {
+                if (_dictResourceTexture.ContainsKey (loader.path) == true)
+                    return;
                 ResourceItem r = new ResourceItem (((TextureLoader)loader).texture);
                 _dictResourceTexture.Add (loader.path, r);
             }
             else if (loader is AssetLoader)
             {
+                if (_dictResourceAsset.ContainsKey (loader.path) == true)
+                    return;
                 ResourceItem r = new ResourceItem (((AssetLoader)loader).asset);
                 _dictResourceAsset.Add (loader.path, r);
             }
@@ -256,6 +261,7 @@ namespace Framework.Resource
             }
 
             _dictRequestSet.Remove (label);
+            Resources.UnloadUnusedAssets ();
             return true;
         }
 
@@ -302,7 +308,6 @@ namespace Framework.Resource
                 return;
 
             _dictResourceAssetBundle.Remove (path);
-            Object.Destroy (res.resource);
         }
 
         private bool IsLoadedExist (string url, ResourceType type)

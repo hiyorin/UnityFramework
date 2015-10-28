@@ -12,6 +12,8 @@ public class DownloadSceneManager : SingletonSceneBase<DownloadSceneManager>
     [SerializeField]
     private CanvasGroup _canvasGroup = null;
     [SerializeField]
+    private Image _imgBackground = null;
+    [SerializeField]
     private Slider _slider = null;
     [SerializeField]
     private Text _textValue = null;
@@ -123,6 +125,7 @@ public class DownloadSceneManager : SingletonSceneBase<DownloadSceneManager>
     {
         isVisible = true;
         _canvasGroup.DOFade (1.0f, _fadeDuration)
+            .OnPlay (OnFadeInPlay)
             .OnComplete (OnFadeInComplete)
             .Play ();
     }
@@ -131,6 +134,7 @@ public class DownloadSceneManager : SingletonSceneBase<DownloadSceneManager>
     {
         isVisible = false;
         _canvasGroup.DOFade (0.0f, _fadeDuration)
+            .OnPlay (OnFadeOutPlay)
             .OnComplete (OnFadeOutComplete)
             .Play ();
     }
@@ -143,13 +147,22 @@ public class DownloadSceneManager : SingletonSceneBase<DownloadSceneManager>
         return false;
     }
 
+    void OnFadeInPlay ()
+    {
+        _imgBackground.enabled = true;
+    }
+
     void OnFadeInComplete ()
     {
+    }
 
+    void OnFadeOutPlay ()
+    {
     }
 
     void OnFadeOutComplete ()
     {
+        _imgBackground.enabled = false;
 
     }
 }

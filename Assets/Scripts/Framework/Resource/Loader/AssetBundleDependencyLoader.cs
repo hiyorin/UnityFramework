@@ -48,7 +48,6 @@ namespace Framework.Resource.Loader
             {
                 while (www.progress < 1.0f || www.isDone == false)
                 {
-                    Debug.Log (www.url + ", " + www.isDone);
                     progress = www.progress;
                     yield return null;
                 }
