@@ -47,7 +47,7 @@ public class ExampleResourceManager_B : SceneBase
             listShowedResourceName.Add (row.url);
 
             RawImage img = GameObject.Instantiate (_prefab).GetComponent<RawImage> ();
-            img.gameObject.SetActive (true);
+            img.gameObject.SetActiveSafe (true);
             img.transform.SetParent (_layout.transform);
             img.transform.Reset ();
             img.texture = texture;

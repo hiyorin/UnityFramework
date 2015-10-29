@@ -90,7 +90,7 @@ namespace Framework.Scene
 
     	public bool isActive {
     		get { return rootObject.activeSelf; }
-    		set { rootObject.SetActive (value); }
+    		set { rootObject.SetActiveSafe (value); }
     	}
     }
 }

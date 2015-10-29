@@ -61,7 +61,7 @@ public class ScenePropertyInspector : Editor
         {
             // プレイ開始時にサブシーンをHierarchyから消す
             foreach (var go in LoadSubSceneDictionary.Values) {
-                go.SetActive (false);
+                go.SetActiveSafe (false);
                 go.hideFlags |= HideFlags.HideInHierarchy;
             }
         }
@@ -70,7 +70,7 @@ public class ScenePropertyInspector : Editor
             // プレイ終了時にサブシーンをHierarchyに表示する
             foreach (var go in LoadSubSceneDictionary.Values)
             {
-                go.SetActive (true);
+                go.SetActiveSafe (true);
                 go.hideFlags &= ~(HideFlags.HideInHierarchy);
             }
         }
