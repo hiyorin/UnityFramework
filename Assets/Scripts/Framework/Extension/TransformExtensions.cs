@@ -245,6 +245,9 @@ public static class TransformExtensions
 		transform.SetLocalScaleZ(transform.localScale.z + z);
 	}
 
+    /// <summary>
+    /// 初期値に戻す
+    /// </summary>
     public static void Reset (this Transform transform)
     {
         transform.localPosition = Vector3.zero;

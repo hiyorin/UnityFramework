@@ -89,7 +89,7 @@ namespace Framework.UI
                 return;
             
             isTransitionComplete = false;
-            Tweener tween = _canvasGroup.DOFade (1.0f, duration).OnComplete (OnCompleteTransition);
+            Tweener tween = canvasGroup.DOFade (1.0f, duration).OnComplete (OnCompleteTransition);
             if (onComplete != null)
                 tween.OnComplete (onComplete);
             tween.Play ();
@@ -101,7 +101,7 @@ namespace Framework.UI
                 return;
 
             isTransitionComplete = false;
-            Tweener tween = _canvasGroup.DOFade (0.0f, duration).OnComplete (OnCompleteTransition);
+            Tweener tween = canvasGroup.DOFade (0.0f, duration).OnComplete (OnCompleteTransition);
             if (onComplete != null)
                 tween.OnComplete (onComplete);
             tween.Play ();

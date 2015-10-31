@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using System.IO;
 
 [CustomPropertyDrawer (typeof (FilterFileExtensionAttribute))]
 public class FilterFileExtensionDrawer : PropertyDrawer
@@ -12,9 +13,11 @@ public class FilterFileExtensionDrawer : PropertyDrawer
     public override void OnGUI (Rect position, SerializedProperty property, GUIContent label)
     {
         FilterFileExtensionAttribute attr = attribute as FilterFileExtensionAttribute;
-        if (property.objectReferenceValue != null) {
+        if (property.objectReferenceValue != null)
+        {
             string path = AssetDatabase.GetAssetPath (property.objectReferenceValue);
-            if (path.EndsWith (attr.fileExtension) == false) {
+            if (Path.GetExtension (path).Equals ("." + attr.fileExtension) == false)
+            {
                 Debug.LogErrorFormat ("{0} is not {1}", property.objectReferenceValue.name, attr.fileExtension);
                 property.objectReferenceValue = null;
             }

@@ -240,7 +240,6 @@ namespace Framework.Resource
 
             foreach (var request in requestSet.GetList ())
             {
-                ResourceItem res = null;
                 switch (request.type)
                 {
                 case ResourceType.Asset:

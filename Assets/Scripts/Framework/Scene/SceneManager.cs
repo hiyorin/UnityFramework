@@ -99,7 +99,7 @@ namespace Framework.Scene
     			switch (sceneNode.state)
     			{
     			case SceneState.Empty:
-    			case SceneState.Create:
+                case SceneState.Create:
     				if (sceneNode.scene.OnSceneCreate () == true)
     					sceneNode.state = SceneState.Initialize;
     				break;
@@ -262,6 +262,8 @@ namespace Framework.Scene
             // スタティックシーンの読み込み
     		foreach (var sceneName in listStaticSceneName)
     		{
+                if (sceneName == Application.loadedLevelName)
+                    continue;
                 IEnumerator process = LoadSingleSceneProcess (sceneName, SceneType.Static, null);
                 while (process.MoveNext () == true)
                     yield return null;
@@ -270,6 +272,8 @@ namespace Framework.Scene
             // 常駐シーンの読み込み
             foreach (var sceneName in listResidentSceneName)
             {
+                if (sceneName == Application.loadedLevelName)
+                    continue;
                 IEnumerator process = LoadSingleSceneProcess (sceneName, SceneType.Resident, null);
                 while (process.MoveNext () == true)
                     yield return null;
