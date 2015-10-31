@@ -21,6 +21,15 @@ namespace Framework.Scene
     	public EventSystem eventSystem { get; private set; }
     	public bool isInitialized { get; private set; }
 
+        void Awake ()
+        {
+            GameObject go = new GameObject ("EventSystem");
+            go.transform.SetParent (transform);
+            eventSystem = go.AddComponent<EventSystem> ();
+            go.AddComponent<StandaloneInputModule> ();
+            go.AddComponent<TouchInputModule> ();
+        }
+
     	void Update ()
         {
     		if (_loadSceneProcess != null)
