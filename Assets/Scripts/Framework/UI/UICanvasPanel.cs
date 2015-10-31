@@ -74,10 +74,10 @@ namespace Framework.UI
 
         public virtual void ResetCanvas ()
         {
-            rectTransform.anchorMin = new Vector2 (0.5f, 0.5f);
-            rectTransform.anchorMax = new Vector2 (0.5f, 0.5f);
+            rectTransform.anchorMin = new Vector2 (0.0f, 0.0f);
+            rectTransform.anchorMax = new Vector2 (1.0f, 1.0f);
             rectTransform.pivot = new Vector2 (0.5f, 0.5f);
-            rectTransform.sizeDelta = rootUICanvas.rectTransform.sizeDelta;
+            rectTransform.sizeDelta = Vector2.zero;
             rectTransform.localPosition = Vector3.zero;
             rectTransform.localRotation = Quaternion.identity;
             rectTransform.localScale = Vector3.one;
@@ -89,7 +89,8 @@ namespace Framework.UI
                 return;
             
             isTransitionComplete = false;
-            Tweener tween = canvasGroup.DOFade (1.0f, duration).OnComplete (OnCompleteTransition);
+            Sequence tween = DOTween.Sequence ();
+            tween.Append (canvasGroup.DOFade (1.0f, duration).OnComplete (OnCompleteTransition));
             if (onComplete != null)
                 tween.OnComplete (onComplete);
             tween.Play ();
@@ -101,7 +102,8 @@ namespace Framework.UI
                 return;
 
             isTransitionComplete = false;
-            Tweener tween = canvasGroup.DOFade (0.0f, duration).OnComplete (OnCompleteTransition);
+            Sequence tween = DOTween.Sequence ();
+            tween.Append (canvasGroup.DOFade (0.0f, duration).OnComplete (OnCompleteTransition));
             if (onComplete != null)
                 tween.OnComplete (onComplete);
             tween.Play ();
