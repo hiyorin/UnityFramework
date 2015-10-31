@@ -12,6 +12,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Framework/Download.unity
   - enabled: 1
+    path: Assets/Scenes/Framework/CommonDialog.unity
+  - enabled: 1
     path: Assets/Example/SceneManager/Scenes/ExampleSceneManager_A.unity
   - enabled: 1
     path: Assets/Example/SceneManager/Scenes/ExampleSceneManager_B.unity
