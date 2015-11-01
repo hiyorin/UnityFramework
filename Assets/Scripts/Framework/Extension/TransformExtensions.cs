@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// Transform型の拡張メソッドを管理するクラス
@@ -253,5 +254,40 @@ public static class TransformExtensions
         transform.localPosition = Vector3.zero;
         transform.localScale = Vector3.one;
         transform.localRotation = Quaternion.identity;
+    }
+
+    public static Transform FindChildAll (this Transform transform, string name)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.name == name)
+            {
+                return child;
+            }
+            else
+            {
+                return child.FindChildAll (name);
+            }
+        }
+        return null;
+    }
+
+    public static Transform[] FindChidrenAll (this Transform transform, string name)
+    {
+        List<Transform> result = new List<Transform> ();
+        FindChildrenAll (transform, name, result);
+        return result.ToArray ();
+    }
+
+    private static void FindChildrenAll (Transform transform, string name, List<Transform> result)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.name == name)
+            {
+                result.Add (child);
+            }
+            FindChildrenAll (child, name, result);
+        }
     }
 }
