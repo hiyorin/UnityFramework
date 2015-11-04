@@ -2,6 +2,7 @@
 using Framework;
 using Framework.Scene;
 using Framework.Resource;
+using Framework.Cameras;
 using DG.Tweening;
 
 public sealed class EntryPoint

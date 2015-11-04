@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Framework.Scene;
 
-namespace Framework
+namespace Framework.Cameras
 {
 	public class CameraManager : SingletonMonoBehaviour<CameraManager>
 	{
