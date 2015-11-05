@@ -19,7 +19,7 @@ namespace Framework.Cameras
 
         public UpdateType updateType = UpdateType.LateUpdate;
 
-        private void Update ()
+        void Update ()
         {
             if (updateType != UpdateType.Update)
                 return;
@@ -30,7 +30,7 @@ namespace Framework.Cameras
             OnUpdateCamera ();
         }
 
-        private void LateUpdate ()
+        void LateUpdate ()
         {
             if (updateType != UpdateType.LateUpdate)
                 return;
@@ -53,8 +53,15 @@ namespace Framework.Cameras
         #if UNITY_EDITOR
         private void OnValidate ()
         {
-            Update ();
-            LateUpdate ();
+            if (targetCamera == null || target == null)
+                return;
+            
+            OnEditorUpdateCamera ();
+        }
+
+        protected virtual void OnEditorUpdateCamera ()
+        {
+            OnUpdateCamera ();
         }
         #endif
     }

@@ -2,6 +2,7 @@
 
 namespace Framework.Cameras
 {
+    [ExecuteInEditMode()]
     public class TrackObjectCameraController : CameraController
     {
         [System.Serializable]
@@ -24,30 +25,65 @@ namespace Framework.Cameras
             Vector3 position = basePosition + positionOffset;
             targetCamera.transform.position = position;
 
-            if (lookAtType == LookAtType.Target)
+            switch (lookAtType)
             {
+            case LookAtType.Target:
                 LookAtTarget ();
-            }
-            else if (lookAtType == LookAtType.BasePosition)
-            {
+                break;
+            case LookAtType.BasePosition:
                 LookAtBasePosition ();
+                break;
+            default:
+                Debug.LogError (lookAtType);
+                break;
             }
         }
 
         private void LookAtTarget ()
         {
+            Vector3 forword = target.position - targetCamera.transform.position + lookAtOffset;
+            if (forword == Vector3.zero)
+                return;
+
+            Quaternion dir = Quaternion.LookRotation (forword);
             float rotationStep = rotationSpeed * Time.deltaTime;
-            Quaternion dir = Quaternion.LookRotation (target.position - targetCamera.transform.position + lookAtOffset);
             Quaternion rotation = Quaternion.RotateTowards (targetCamera.transform.rotation, dir, rotationStep);
             targetCamera.transform.rotation = rotation;
         }
 
         private void LookAtBasePosition ()
         {
+            Vector3 forword = (basePosition + lookAtOffset) - targetCamera.transform.position;
+            if (forword == Vector3.zero)
+                return;
+            
+            Quaternion dir = Quaternion.LookRotation (forword);
             float rotationStep = rotationSpeed * Time.deltaTime;
-            Quaternion dir = Quaternion.LookRotation (basePosition - targetCamera.transform.position + lookAtOffset);
             Quaternion rotation = Quaternion.RotateTowards (targetCamera.transform.rotation, dir, rotationStep);
             targetCamera.transform.rotation = rotation;
         }
+
+        #if UNITY_EDITOR
+        protected override void OnEditorUpdateCamera ()
+        {
+            float moveStep = moveSpeed * Time.deltaTime;
+            basePosition = Vector3.MoveTowards (basePosition, target.transform.position, moveStep);
+            Vector3 position = basePosition + positionOffset;
+            targetCamera.transform.position = position;
+
+            switch (lookAtType)
+            {
+            case LookAtType.Target:
+                targetCamera.transform.LookAt (target.position + lookAtOffset);
+                break;
+            case LookAtType.BasePosition:
+                targetCamera.transform.LookAt (basePosition + lookAtOffset);
+                break;
+            default:
+                Debug.LogError (lookAtType);
+                break;
+            }
+        }
+        #endif
     }
 }
