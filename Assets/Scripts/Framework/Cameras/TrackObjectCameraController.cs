@@ -37,7 +37,7 @@ namespace Framework.Cameras
         private void LookAtTarget ()
         {
             float rotationStep = rotationSpeed * Time.deltaTime;
-            Quaternion dir = Quaternion.LookRotation (target.position - targetCamera.transform.position);
+            Quaternion dir = Quaternion.LookRotation (target.position - targetCamera.transform.position + lookAtOffset);
             Quaternion rotation = Quaternion.RotateTowards (targetCamera.transform.rotation, dir, rotationStep);
             targetCamera.transform.rotation = rotation;
         }
@@ -45,7 +45,7 @@ namespace Framework.Cameras
         private void LookAtBasePosition ()
         {
             float rotationStep = rotationSpeed * Time.deltaTime;
-            Quaternion dir = Quaternion.LookRotation (basePosition - targetCamera.transform.position);
+            Quaternion dir = Quaternion.LookRotation (basePosition - targetCamera.transform.position + lookAtOffset);
             Quaternion rotation = Quaternion.RotateTowards (targetCamera.transform.rotation, dir, rotationStep);
             targetCamera.transform.rotation = rotation;
         }
