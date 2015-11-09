@@ -96,6 +96,11 @@ namespace Framework.Scene
     		// ライフサイクル制御
     		foreach (var sceneNode in _sceneNodeSet.nodeList)
     		{
+                if (sceneNode.scene == null)
+                {
+                    Debug.LogWarningFormat ("SceneBase({0}) is null", sceneNode.name);
+                    continue;
+                }
     			switch (sceneNode.state)
     			{
     			case SceneState.Empty:
