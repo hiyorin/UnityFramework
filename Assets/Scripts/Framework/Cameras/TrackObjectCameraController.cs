@@ -12,11 +12,17 @@ namespace Framework.Cameras
             BasePosition,
         }
 
+        public readonly CameraEvent onMoveStart = new CameraEvent ();
+        public readonly CameraEvent onMoveEnd = new CameraEvent ();
+
         public LookAtType lookAtType = LookAtType.BasePosition;
         public float moveSpeed = 1.0f;
         public float rotationSpeed = 1.0f;
+        public float freeMovement = 0.1f;
 
         private Vector3 basePosition = Vector3.zero;
+
+        public bool isMoving { private set; get; }
 
         protected override void OnUpdateCamera ()
         {
@@ -36,6 +42,17 @@ namespace Framework.Cameras
             default:
                 Debug.LogError (lookAtType);
                 break;
+            }
+
+            if (isMoving == true && basePosition.magnitude < freeMovement)
+            {
+                isMoving = false;
+                onMoveEnd.Invoke (this);
+            }
+            else if (isMoving == false && basePosition.magnitude > freeMovement)
+            {
+                isMoving = true;
+                onMoveStart.Invoke (this);
             }
         }
 

@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 namespace Framework.Cameras
 {
     public class CameraController : MonoBehaviour
     {
+        public class CameraEvent : UnityEvent<CameraController> {}
+
         [System.Serializable]
         public enum UpdateType
         {
