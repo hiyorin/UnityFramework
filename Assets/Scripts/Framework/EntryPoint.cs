@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Framework;
 using Framework.Scene;
 using Framework.Resource;
 using Framework.Cameras;
@@ -10,9 +9,6 @@ public sealed class EntryPoint
 	[RuntimeInitializeOnLoadMethod]
 	private static void CreateStaticGameObject ()
     {
-//        Object fingerGestures = Object.Instantiate (Resources.Load ("FingerGestures"));
-//        SceneManager.Instance.AddIgnoreCollection (fingerGestures.name);
-
         SceneManager.GetInstance ();
         ResourceManager.GetInstance ();
         CameraManager.GetInstance ();

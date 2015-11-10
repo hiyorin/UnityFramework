@@ -14,10 +14,16 @@ namespace Framework.Cameras
 		protected override void OnInitialize ()
         {
             base.OnInitialize ();
-            SceneManager.Instance.AddIgnoreCollection (name);
+            SceneManager.Instance.AddIgnoreCollection (gameObject.name);
 			CreateUIBackgroundCamera ();
 			CreateUICamera ();
 		}
+
+        protected override void OnFinalize ()
+        {
+            base.OnFinalize ();
+            SceneManager.Instance.RemoveIgnoreCollection (gameObject.name);
+        }
 
 		private void CreateUIBackgroundCamera ()
 		{

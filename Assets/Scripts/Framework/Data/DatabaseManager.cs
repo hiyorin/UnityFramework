@@ -1,13 +1,24 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using Framework.Scene;
 
 namespace Framework.Data
 {
     public class DatabaseManager : SingletonMonoBehaviour<DatabaseManager>
     {
         private readonly Dictionary<Type, ITable> _dictTable = new Dictionary<Type, ITable> ();
+
+        protected override void OnInitialize ()
+        {
+            base.OnInitialize ();
+            SceneManager.Instance.AddIgnoreCollection (gameObject.name);
+        }
+
+        protected override void OnFinalize ()
+        {
+            base.OnFinalize ();
+            SceneManager.Instance.RemoveIgnoreCollection (gameObject.name);
+        }
 
         public bool CreateTable (ITable table)
         {
