@@ -256,6 +256,22 @@ public static class TransformExtensions
         transform.localRotation = Quaternion.identity;
     }
 
+    /// <summary>
+    /// localの値を保持したままSetParentを実行する
+    /// </summary>
+    /// <param name="transform">Transform.</param>
+    /// <param name="parent">Parent.</param>
+    public static void SetParentRatain (this Transform transform, Transform parent)
+    {
+        Vector3 localPosition = transform.localPosition;
+        Vector3 localScale = transform.localScale;
+        Quaternion localRotation = transform.localRotation;
+        transform.SetParent (parent);
+        transform.localPosition = localPosition;
+        transform.localScale = localScale;
+        transform.localRotation = localRotation;
+    }
+
     public static Transform FindChildAll (this Transform transform, string name)
     {
         foreach (Transform child in transform)
