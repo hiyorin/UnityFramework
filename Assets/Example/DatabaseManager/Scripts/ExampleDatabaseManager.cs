@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Framework.Scene;
@@ -15,21 +16,13 @@ public class ExampleDatabaseManager : SceneBase
 
         public ExampleRecordSub sub { private set; get; }
 
-        public ExampleRecord (IDictionary dict) : base (dict)
+        protected override Record RequireRecord (Type recordType, string propertyName)
         {
-            var subTable = DatabaseManager.Instance.GetTable<ExampleTableSub> ();
-            sub = subTable.records.FirstOrDefault (x => x.key == subKey);
-            Debug.Log (sub.key);
-        }
-    }
-
-    public class ExampleTable : Table<ExampleRecord>
-    {
-        public ExampleTable (IDictionary dict) : base (dict) {}
-
-        protected override ExampleRecord SetupRecord (IDictionary dict)
-        {
-            return new ExampleRecord (dict);
+            Debug.Log ("RequireRecord " + recordType.ToString () + ", " + propertyName);
+            if (recordType == typeof(ExampleRecordSub) && propertyName == "sub")
+                return DatabaseManager.Instance.GetTable<ExampleRecordSub> ().
+                    records.FirstOrDefault (x => x.key == subKey);
+            return null;
         }
     }
 
@@ -37,29 +30,18 @@ public class ExampleDatabaseManager : SceneBase
     {
         public string key { private set; get; }
         public int value { private set; get; }
-
-        public ExampleRecordSub (IDictionary dict) : base (dict) {}
-    }
-
-    public class ExampleTableSub : Table<ExampleRecordSub>
-    {
-        public ExampleTableSub (IDictionary dict) : base (dict) {}
-
-        protected override ExampleRecordSub SetupRecord (IDictionary dict)
-        {
-            return new ExampleRecordSub (dict);
-        }
     }
 
     public override bool OnSceneCreate ()
     {
+        Debug.Log ("OnSceneCreate");
+        
         IDictionary subDict = new Dictionary<int, IDictionary> ();
         subDict.Add (0, new Dictionary<string, object> {
             {"key",     "subKeyString"},
             {"value",   1},
         });
-        ExampleTableSub subTable = new ExampleTableSub (subDict);
-        DatabaseManager.Instance.CreateTable (subTable);
+        DatabaseManager.Instance.CreateTable<ExampleRecordSub> (subDict);
 
         IDictionary mainDict = new Dictionary<int, IDictionary> ();
         mainDict.Add (0, new Dictionary<string, object> {
@@ -67,14 +49,15 @@ public class ExampleDatabaseManager : SceneBase
             {"subKey",  "subKeyString"},
             {"value",   10},
         });
-        ExampleTable mainTable = new ExampleTable (mainDict);
-        DatabaseManager.Instance.CreateTable (mainTable);
+        DatabaseManager.Instance.CreateTable<ExampleRecord> (mainDict);
         return true;
     }
 
     public override bool OnSceneInitialize ()
     {
-        var table = DatabaseManager.Instance.GetTable<ExampleTable> ();
+        Debug.Log ("OnSceneInitialize");
+
+        var table = DatabaseManager.Instance.GetTable<ExampleRecord> ();
         foreach (var record in table.records)
         {
             Debug.LogFormat ("key:{0}, subKey:{1}, value:{2}, subValue:{3}",

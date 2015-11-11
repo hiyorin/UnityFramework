@@ -7,12 +7,12 @@ namespace Framework.Data
 {
     public abstract class Record
     {
-        public Record (IDictionary dict)
+        protected virtual Record RequireRecord (Type recordType, string propertyName)
         {
-            SetupRecord (this, dict);
+            return null;
         }
 
-        protected static void SetupRecord (Record record, IDictionary dict)
+        public static void SetupRecord (Record record, IDictionary dict)
         {
             foreach (PropertyDescriptor property in TypeDescriptor.GetProperties (record))
             {
@@ -20,7 +20,8 @@ namespace Framework.Data
 
                 if (type.BaseType == typeof(Record))
                 {
-                    SetupRecord (property.GetValue (record) as Record, dict [property.Name] as IDictionary);
+                    Record requireRecord = record.RequireRecord (type, property.Name);
+                    property.SetValue (record, requireRecord);
                 }
                 else
                 {
