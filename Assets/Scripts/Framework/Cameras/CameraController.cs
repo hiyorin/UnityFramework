@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace Framework.Cameras
 {
-    public class CameraController : MonoBehaviour
+    public abstract class CameraController : MonoBehaviour
     {
         public class CameraEvent : UnityEvent<CameraController> {}
 
@@ -16,49 +17,60 @@ namespace Framework.Cameras
 
         public Camera targetCamera = null;
         public Transform target = null;
-
-        public Vector3 positionOffset = Vector3.zero;
-        public Vector3 lookAtOffset = Vector3.zero;
-
         public UpdateType updateType = UpdateType.LateUpdate;
+        public List<CameraController> owners = new List<CameraController> ();
 
-        void Update ()
+        public virtual bool isActiveTarget {
+            get { return (targetCamera != null && target != null); }
+        }
+
+        public bool isActiveTargetOwners {
+            get {
+                if (owners == null)
+                    return false;
+                foreach (var owner in owners)
+                    if (owner.isActiveTarget == true)
+                        return true;
+                return false;
+            }
+        }
+
+        private void Update ()
         {
             if (updateType != UpdateType.Update)
                 return;
 
-            if (targetCamera == null || target == null)
+            if (isActiveTarget == false)
+                return;
+
+            if (isActiveTargetOwners == true)
                 return;
 
             OnUpdateCamera ();
         }
 
-        void LateUpdate ()
+        private void LateUpdate ()
         {
             if (updateType != UpdateType.LateUpdate)
                 return;
-            
-            if (targetCamera == null || target == null)
+
+            if (isActiveTarget == false)
+                return;
+
+            if (isActiveTargetOwners == true)
                 return;
 
             OnUpdateCamera ();
         }
 
-        protected virtual void OnUpdateCamera ()
-        {
-            Vector3 position = target.transform.position + positionOffset;
-            targetCamera.transform.position = position;
+        protected abstract void OnUpdateCamera ();
 
-            Vector3 lookAtPosition = target.position + lookAtOffset;
-            targetCamera.transform.LookAt (lookAtPosition);
-        }
-
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnValidate ()
         {
             if (targetCamera == null || target == null)
                 return;
-            
+
             OnEditorUpdateCamera ();
         }
 
@@ -66,6 +78,6 @@ namespace Framework.Cameras
         {
             OnUpdateCamera ();
         }
-        #endif
+#endif
     }
 }

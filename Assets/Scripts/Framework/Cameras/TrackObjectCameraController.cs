@@ -2,8 +2,7 @@
 
 namespace Framework.Cameras
 {
-    [ExecuteInEditMode()]
-    public class TrackObjectCameraController : CameraController
+    public class TrackObjectCameraController : LookAtCameraController
     {
         [System.Serializable]
         public enum LookAtType
@@ -80,7 +79,7 @@ namespace Framework.Cameras
             targetCamera.transform.rotation = rotation;
         }
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         protected override void OnEditorUpdateCamera ()
         {
             float moveStep = moveSpeed * Time.deltaTime;
@@ -101,6 +100,6 @@ namespace Framework.Cameras
                 break;
             }
         }
-        #endif
+#endif
     }
 }

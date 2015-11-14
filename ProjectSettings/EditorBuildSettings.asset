@@ -29,3 +29,5 @@ EditorBuildSettings:
     path: Assets/Example/CommonDialog/Scenes/ExampleCommonDialogManager.unity
   - enabled: 1
     path: Assets/Example/DatabaseManager/Scenes/ExampleDatabaseManager.unity
+  - enabled: 1
+    path: Assets/Example/CameraController/Scenes/ExampleCameraController.unity
