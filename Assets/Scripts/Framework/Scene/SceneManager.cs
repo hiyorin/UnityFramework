@@ -125,9 +125,8 @@ namespace Framework.Scene
                     {
                         sceneNode.scene.OnSceneStart ();
                         TransitionSceneManager.Instance.FadeIn ();
-                        sceneNode.state = SceneState.Update;
                     }
-                    else if (sceneNode.isVisibled == true)
+                    if (sceneNode.isVisibled == true)
                         sceneNode.state = SceneState.Visible;
                     else
                         sceneNode.state = SceneState.Update;
