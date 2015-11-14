@@ -23,14 +23,32 @@ namespace Framework.Cameras
             if (isActiveTargetOwners == true)
                 return;
             
-            Vector3 baseWorldPos = targetCamera.ScreenToWorldPoint (new Vector3 (0.0f, 0.0f, distance));
-            Vector3 deltaWorldPos = targetCamera.ScreenToWorldPoint (new Vector3 (1.0f, 0.0f, distance));
-            float completion = deltaWorldPos.x - baseWorldPos.x;
-
+            float completion = GetCompletion ();
             Vector3 delta = screenDeltaMove.SwapYZ () * completion;
             Vector3 angle = new Vector3 (0.0f, targetCamera.transform.rotation.eulerAngles.y, 0.0f);
             delta = Quaternion.Euler (angle) * delta;
-            deltaMove = delta;
+            deltaMove += delta;
+        }
+
+        public void Pinch (float screenDeltaMove)
+        {
+            if (screenDeltaMove == 0.0f)
+                return;
+
+            if (isActiveTargetOwners == true)
+                return;
+
+            float completion = GetCompletion ();
+            Vector3 delta = targetCamera.transform.forward * screenDeltaMove;
+            delta *= completion;
+            deltaMove += delta;
+        }
+
+        private float GetCompletion ()
+        {
+            Vector3 baseWorldPos = targetCamera.ScreenToWorldPoint (new Vector3 (0.0f, 0.0f, distance));
+            Vector3 deltaWorldPos = targetCamera.ScreenToWorldPoint (new Vector3 (1.0f, 0.0f, distance));
+            return deltaWorldPos.x - baseWorldPos.x;
         }
     }
 }

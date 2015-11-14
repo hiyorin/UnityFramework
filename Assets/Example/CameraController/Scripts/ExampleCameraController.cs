@@ -29,5 +29,8 @@ public class ExampleCameraController : SceneBase
         {
             isPress = false;
         }
+
+        float scrollDelta = Input.mouseScrollDelta.y;
+        gestureCamera.Pinch (scrollDelta);
     } 
 }
