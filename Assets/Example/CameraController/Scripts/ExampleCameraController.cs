@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Framework;
 using Framework.Scene;
 using Framework.Cameras;
 
@@ -6,35 +7,17 @@ public class ExampleCameraController : SceneBase
 {
     [SerializeField]
     private GestureCameraController gestureCamera = null;
+    [SerializeField]
+    private GestureSimulater gestureSimulater = null;
 
     private bool isPress = false;
     private Vector3 touchPosition = Vector3.zero;
 
     public override void OnSceneUpdate ()
     {
-        if (Input.GetMouseButton (0) == true)
-        {
-            if (isPress == true)
-            {
-                Vector3 delta = touchPosition - Input.mousePosition;
-                gestureCamera.Drag (delta);
-            }
-            else
-            {
-                isPress = true;
-            }
-            touchPosition = Input.mousePosition;
-        }
-        else
-        {
-            isPress = false;
-        }
-
-        float pinchDelta = Input.mouseScrollDelta.y;
-        gestureCamera.Pinch (pinchDelta);
-
-        float twistDelta = Input.mouseScrollDelta.x;
-        gestureCamera.Twist (twistDelta);
+        gestureCamera.Drag (gestureSimulater.dragDelta);
+        gestureCamera.Pinch (gestureSimulater.pinchDelta);
+        gestureCamera.Twist (gestureSimulater.twistDelta);
 
     } 
 }
