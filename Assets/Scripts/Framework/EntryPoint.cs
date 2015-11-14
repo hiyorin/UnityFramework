@@ -4,16 +4,19 @@ using Framework.Resource;
 using Framework.Cameras;
 using DG.Tweening;
 
-public sealed class EntryPoint
+namespace Framework
 {
-	[RuntimeInitializeOnLoadMethod]
-	private static void CreateStaticGameObject ()
+    public sealed class EntryPoint
     {
-        SceneManager.GetInstance ();
-        ResourceManager.GetInstance ();
-        CameraManager.GetInstance ();
+    	[RuntimeInitializeOnLoadMethod]
+    	private static void CreateStaticGameObject ()
+        {
+            SceneManager.GetInstance ();
+            ResourceManager.GetInstance ();
+            CameraManager.GetInstance ();
 
-        SceneManager.Instance.AddIgnoreCollection ("[DOTween]");
-        DOTween.Init (true, false, LogBehaviour.ErrorsOnly);
+            SceneManager.Instance.AddIgnoreCollection ("[DOTween]");
+            DOTween.Init (true, false, LogBehaviour.ErrorsOnly);
+        }
     }
 }
