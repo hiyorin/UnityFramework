@@ -30,7 +30,11 @@ public class ExampleCameraController : SceneBase
             isPress = false;
         }
 
-        float scrollDelta = Input.mouseScrollDelta.y;
-        gestureCamera.Pinch (scrollDelta);
+        float pinchDelta = Input.mouseScrollDelta.y;
+        gestureCamera.Pinch (pinchDelta);
+
+        float twistDelta = Input.mouseScrollDelta.x;
+        gestureCamera.Twist (twistDelta);
+
     } 
 }
