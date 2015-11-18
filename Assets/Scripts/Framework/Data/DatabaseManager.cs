@@ -9,7 +9,12 @@ namespace Framework.Data
     public class DatabaseManager : SingletonMonoBehaviour<DatabaseManager>
     {
         private readonly Dictionary<Type, BaseTable> _dictTable = new Dictionary<Type, BaseTable> ();
-
+#if UNITY_EDITOR
+        public abstract class AbstractEditor : UnityEditor.Editor {
+            public DatabaseManager instance { get { return target as DatabaseManager; } }
+            public Dictionary<Type, BaseTable> dictTable { get { return instance._dictTable; } }
+        }
+#endif
         protected override void OnInitialize ()
         {
             base.OnInitialize ();

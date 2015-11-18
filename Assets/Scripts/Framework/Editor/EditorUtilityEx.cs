@@ -1,12 +1,29 @@
 ﻿using UnityEditor;
 using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Framework;
 
 public class EditorUtilityEx : Editor
 {
+    public static void DrawList (string label, IList list, ref bool isFoldout, Action<int, object> callback=null)
+    {
+        isFoldout = EditorGUILayout.Foldout (isFoldout, label);
+        if (isFoldout == true)
+        {
+            EditorGUI.indentLevel ++;
+            EditorGUILayout.IntField ("Size", list.Count);
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (callback != null)
+                    callback.Invoke (i, list [i]);
+            }
+            EditorGUI.indentLevel --;
+        }
+    }
+
     public static void DrawList<T> (string label, List<T> list, ref bool isFoldout, Action<int, T> callback=null)
     {
         isFoldout = EditorGUILayout.Foldout (isFoldout, label);

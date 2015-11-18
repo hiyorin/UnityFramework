@@ -16,6 +16,11 @@ public class ExampleDatabaseManager : SceneBase
 
         public ExampleRecordSub sub { private set; get; }
 
+        public override object GetPrimaryKey ()
+        {
+            return key;
+        }
+
         protected override Record RequireRecord (Type recordType, string propertyName)
         {
             Debug.Log ("RequireRecord " + recordType.ToString () + ", " + propertyName);
@@ -30,6 +35,11 @@ public class ExampleDatabaseManager : SceneBase
     {
         public string key { private set; get; }
         public int value { private set; get; }
+
+        public override object GetPrimaryKey ()
+        {
+            return key;
+        }
     }
 
     public override bool OnSceneCreate ()

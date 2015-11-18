@@ -8,6 +8,7 @@ namespace Framework.Data
 
     public class Table<T> : BaseTable where T:Record, new()
     {
+        public readonly Type recordType = typeof(T);
         protected readonly IList<T> recordList = new List<T> ();
 
         public IEnumerable<T> records {

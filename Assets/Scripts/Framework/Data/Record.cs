@@ -7,6 +7,8 @@ namespace Framework.Data
 {
     public abstract class Record
     {
+        public abstract object GetPrimaryKey ();
+
         protected virtual Record RequireRecord (Type recordType, string propertyName)
         {
             return null;
