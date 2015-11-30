@@ -43,12 +43,12 @@ namespace Framework.Cameras
                 break;
             }
 
-            if (isMoving == true && basePosition.magnitude < freeMovement)
+            if (isMoving == true && basePosition == target.transform.position)
             {
                 isMoving = false;
                 onMoveEnd.Invoke (this);
             }
-            else if (isMoving == false && basePosition.magnitude > freeMovement)
+            else if (isMoving == false && basePosition != target.transform.position)
             {
                 isMoving = true;
                 onMoveStart.Invoke (this);
